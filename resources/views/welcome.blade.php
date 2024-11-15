@@ -10,26 +10,38 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f4fc; /* Rezerves fona krāsa */
-            background-image: url('VT-eka.png'); /* Fona attēls */
+            background-image: url('VT-eka.jpg'); /* Fona attēls */
             background-size: cover; /* Pārklāj visu lapu */
             background-position: center; /* Centrs */
             background-repeat: no-repeat; /* Attēlu neatkārto */
             color: #333;
             margin: 0;
             padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            justify-content: flex-end; /* Novieto saturu apakšā */
         }
+
+        /* Konteiners apakšā */
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
             background-color: rgba(255, 255, 255, 0.8); /* Puscaurspīdīgs balts fons, lai saturs būtu vieglāk lasāms */
             border-radius: 10px;
+            position: fixed;
+            bottom: 0; /* Novieto pie apakšas */
+            left: 50%;
+            transform: translateX(-50%); /* Centrs horizontāli */
+            width: 100%; /* Aizņem visu platumu */
+            box-sizing: border-box;
         }
 
         /* Logo un galvenes stili */
         .logo-container {
             text-align: center;
-            margin: 20px 0;
+            margin-bottom: 10px; /* Samazina atstarpi ap logotipu */
         }
         .logo {
             max-width: 150px;
@@ -70,6 +82,7 @@
     </style>
 </head>
 <body>
+    <!-- Konteiners apakšā ar logotipu un pogām -->
     <div class="container">
         <!-- Logotips -->
         <div class="logo-container">
