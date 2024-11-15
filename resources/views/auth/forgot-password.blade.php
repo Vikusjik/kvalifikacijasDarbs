@@ -1,11 +1,12 @@
 <x-guest-layout>
     <x-authentication-card>
         <x-slot name="logo">
-            <x-authentication-card-logo />
+            <img src="{{ asset('VT-logo.png') }}" alt="VT Logo" class="w-24 h-24 mx-auto">
+           
         </x-slot>
 
         <div class="mb-4 text-sm text-gray-600">
-            {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+            {{ __('Aizmirsi paroli? Ieraksti e-pastu un izveido jaunu paroli!') }}
         </div>
 
         @session('status')
@@ -20,13 +21,13 @@
             @csrf
 
             <div class="block">
-                <x-label for="email" value="{{ __('Email') }}" />
+                <x-label for="email" value="{{ __('E-pasts') }}" />
                 <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
             </div>
 
             <div class="flex items-center justify-end mt-4">
                 <x-button>
-                    {{ __('Email Password Reset Link') }}
+                    {{ __('E-pasta paroles atiestatīšanas saite') }}
                 </x-button>
             </div>
         </form>
