@@ -7,6 +7,13 @@
     <title>Document</title>
 </head>
 <body>
-    Skolotaju lapa
+    Skolotāju lapa
+
+    <form method="POST" action="{{ route('logout') }}" >
+        @csrf
+        <input type="submit" value="logout">
+
+        
+    </form>
 </body>
 </html>
