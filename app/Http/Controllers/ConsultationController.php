@@ -13,7 +13,8 @@ class ConsultationController extends Controller
      */
     public function index()
     {
-        //
+        $consultations = Consultation::all();
+        return view('consultations.index');
     }
 
     /**

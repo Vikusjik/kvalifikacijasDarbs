@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ConsultationController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,4 +19,4 @@ Route::middleware([
 });
 
 
-route::get('/home',[HomeController::class,'index']);
+Route::resource('consultations', ConsultationController::class);
