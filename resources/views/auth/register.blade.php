@@ -1,7 +1,7 @@
 <x-guest-layout>
     <x-authentication-card>
         <x-slot name="logo">
-            <img src="{{ asset('VT-logo.png') }}" alt="VT Logo" class="w-24 h-24 mx-auto">
+            <img src="{{ asset('VT-logo.jpeg') }}" alt="VT Logo" class="w-24 h-24 mx-auto">
         </x-slot>
 
         <x-validation-errors class="mb-4" />

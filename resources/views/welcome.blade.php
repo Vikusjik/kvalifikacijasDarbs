@@ -4,76 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Ventspils Tehnikums - Mājaslapa</title>
+    <title>Ventspils Tehnikums 2 - Mājaslapa</title>
     <style>
-        /* Kopējie stili */
+       
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f4fc; /* Rezerves fona krāsa */
-            background-image: url('VT-eka.jpg'); /* Fona attēls */
-            background-size: cover; /* Pārklāj visu lapu */
-            background-position: center; /* Centrs */
-            background-repeat: no-repeat; /* Attēlu neatkārto */
+            background-color: #e6f2ff; 
+            background-image: url('VT-eka.png'); 
+            background-size: contain; 
+            background-position: center; 
+            background-repeat: no-repeat; 
             color: #333;
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            justify-content: flex-end; /* Novieto saturu apakšā */
+            justify-content: flex-end; 
         }
 
-        /* Konteiners apakšā */
+       
         .container {
-            max-width: 1200px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
-            background-color: rgba(255, 255, 255, 0.8); /* Puscaurspīdīgs balts fons, lai saturs būtu vieglāk lasāms */
-            border-radius: 10px;
-            position: fixed;
-            bottom: 0; /* Novieto pie apakšas */
-            left: 50%;
-            transform: translateX(-50%); /* Centrs horizontāli */
-            width: 100%; /* Aizņem visu platumu */
-            box-sizing: border-box;
+            background-color: rgba(255, 255, 255, 0.9); 
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
         }
 
-        /* Logo un galvenes stili */
         .logo-container {
-            text-align: center;
-            margin-bottom: 10px; /* Samazina atstarpi ap logotipu */
+            margin-bottom: 20px;
         }
         .logo {
-            max-width: 150px;
+            max-width: 120px; 
             height: auto;
         }
 
-        /* Navigācijas joslas stili */
+       
         nav {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
             margin-top: 10px;
         }
         nav a {
             text-decoration: none;
             color: #333;
-            padding: 10px 15px;
+            padding: 10px 20px;
             border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s;
+            font-weight: bold;
+            border: 1px solid #ddd; 
+            transition: all 0.3s ease-in-out;
         }
         nav a:hover {
-            background-color: #4c9ed9;
+            background-color: #007bff;
             color: white;
+            border-color: #0056b3;
         }
 
-        /* Pogu stili */
+        
         .btn {
             padding: 10px 20px;
             background-color: #007bff;
             color: white;
             text-decoration: none;
             border-radius: 5px;
+            font-weight: bold;
             transition: background-color 0.3s;
         }
         .btn:hover {
@@ -86,14 +84,14 @@
     <div class="container">
         <!-- Logotips -->
         <div class="logo-container">
-            <img src="/VT-logo.png" alt="Ventspils Tehnikums Logo" class="logo">
+            <img src="/VT-logo.jpeg" alt="Ventspils Tehnikums Logo" class="logo">
         </div>
 
         <!-- Navigācija -->
         @if (Route::has('login'))
             <nav>
                 @auth
-                    <a href="{{ url('/dashboard') }}" class="btn">Dashboard</a>
+                    <a href="{{ url('/dashboard') }}">Dashboard</a>
                 @else
                     <a href="{{ route('login') }}" class="btn">Pieslēgties</a>
                     @if (Route::has('register'))
