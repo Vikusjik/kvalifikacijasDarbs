@@ -14,7 +14,7 @@ class ConsultationController extends Controller
      */
     public function index()
     {
-        $consultation = Consultations::all();
+        $consultation = Consultation::all();
         return view('consultations.index', ['consultations'=> $consultation]);
     }
 
@@ -23,7 +23,7 @@ class ConsultationController extends Controller
      */
     public function create()
     {
-        return view("consultations.create");
+        return view('consultations.create');
     }
 
     /**
@@ -35,7 +35,7 @@ class ConsultationController extends Controller
             'title' => 'required|string|max:255', 
         ]);
 
-        Consultations::create([
+        Consultation::create([
             'title' => $request->title, 
         ]);
 
@@ -54,7 +54,7 @@ class ConsultationController extends Controller
      */
     public function edit(string $id)
     {
-        $consultation = Consultations::findOrFail($id); // Atrod konkrētu ierakstu
+        $consultation = Consultation::findOrFail($id); // Atrod konkrētu ierakstu
         return view('consultations.edit', compact('consultation'));
     }
 
@@ -67,7 +67,7 @@ class ConsultationController extends Controller
             'title' => 'required|string|max:255',
         ]);
     
-        $consultation = Consultations::findOrFail($id);
+        $consultation = Consultation::findOrFail($id);
         $consultation->update([
             'title' => $request->title,
         ]);
@@ -80,7 +80,7 @@ class ConsultationController extends Controller
      */
     public function destroy(string $id)
     {
-        $consultation = Consultations::findOrFail($id);
+        $consultation = Consultation::findOrFail($id);
     $consultation->delete();
 
     return redirect()->route('consultations.index')->with('success', 'Consultation deleted successfully.');
