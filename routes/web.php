@@ -19,4 +19,5 @@ Route::middleware([
 });
 
 
+Route::get('/home', [HomeController::class, 'index']);
 Route::resource('consultations', ConsultationController::class);
