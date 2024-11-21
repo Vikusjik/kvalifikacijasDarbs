@@ -66,12 +66,48 @@
             font-weight: bold;
             border: none;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.2s ease-in-out;
+            margin-right: 10px;
         }
 
         button:hover {
             background-color: #0056b3;
+            transform: scale(1.05);
         }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* Stils pogai 'Atpakaļ uz sarakstu' */
+        .back-btn {
+            background-color: #28a745;
+            padding: 12px 25px;
+            color: white;
+            border-radius: 30px;
+            text-transform: uppercase;
+            font-weight: 600;
+            border: 2px solid transparent;
+            transition: all 0.3s ease-in-out;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .back-btn:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+            transform: translateY(-3px);
+        }
+
+        .back-btn i {
+            font-size: 18px;
+        }
+
     </style>
 </head>
 <body>
@@ -87,7 +123,12 @@
             <label for="date_time">Konsultācijas datums un laiks:</label>
             <input type="datetime-local" id="date_time" name="date_time" value="{{ \Carbon\Carbon::parse($consultation->date_time)->format('Y-m-d\TH:i') }}" required>
 
-            <button type="submit">Atjaunināt</button>
+            <div class="button-container">
+                <button type="submit">Atjaunināt</button>
+                <a href="{{ route('consultations.index') }}" class="back-btn">
+                    <i class="fa fa-arrow-left"></i> Atpakaļ uz sarakstu
+                </a>
+            </div>
         </form>
     </div>
 

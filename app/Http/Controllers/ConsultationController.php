@@ -10,8 +10,8 @@ class ConsultationController extends Controller
 {
     public function index()
     {
-        $consultations = Consultation::all();
-        return view('consultations.index', compact('consultations'));
+        $consultations = Consultation::all();  
+        return view('consultations.index', compact('consultations'));  
     }
 
     public function create()
@@ -19,48 +19,59 @@ class ConsultationController extends Controller
         return view('consultations.create');
     }
 
+    
     public function store(Request $request)
-{
-    $validated = $request->validate([
-        'date_time' => 'required|date',
-    ]);
+    {
+        
+        $validated = $request->validate([
+            'date_time' => 'required|date',  
+        ]);
 
-  
-    $consultation = new Consultation();
-    $consultation->date_time = $validated['date_time'];
-    $consultation->save();
+        
+        $consultation = new Consultation();
+        $consultation->date_time = $validated['date_time'];
+        $consultation->save();  
 
-     return redirect('/consultations')->with('success', 'Konsultācija ir veiksmīgi izveidota!');
-}
+        
+        return redirect('/consultations')->with('success', 'Konsultācija ir veiksmīgi izveidota!');
+    }
+
 
  
     public function show(Consultation $consultation)
     {
-        return view('consultations.show', ['consultation' => $consultation]);
+        return view('consultations.show', compact('consultation'));   
     }
 
     public function edit($id)
     {
         
         $consultation = Consultation::findOrFail($id);
+        
         return view('consultations.edit', ['consultation' => $consultation]);
     }
 
-    public function update(Request $request, $id)
+  
+
+        public function update(Request $request, $id)
 {
+    
     $request->validate([
         'date_time' => 'required|date',
     ]);
 
+    
     $consultation = Consultation::findOrFail($id);
-    $consultation->update([
-        'date_time' => $request->input('date_time'),
-    ]);
 
-    return redirect()->route('consultations.index')->with('success', 'Konsultācijas datu mainīšana ir veiksmīga');
-}
+    // Apstrādā datumu, izmantojot Carbon
+    $consultation->date_time = \Carbon\Carbon::parse($request->input('date_time'));
 
     
+    $consultation->save();
+
+    
+    return redirect()->route('consultations.index')->with('success', 'Konsultācijas datu mainīšana ir veiksmīga');
+}
 
     public function destroy($id)
     {
