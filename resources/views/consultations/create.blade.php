@@ -6,10 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Pievienot konsultāciju</title>
     <style>
-        body {
+         body {
             font-family: Arial, sans-serif;
             background-color: #e6f2ff;
-            background-image: url('VT-eka.png');
+            background-image: url('{{ asset('images/VT-eka.png') }}');
             background-size: contain;
             background-position: center;
             background-repeat: no-repeat;
