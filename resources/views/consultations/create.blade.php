@@ -48,7 +48,7 @@
             margin-bottom: 10px;
         }
 
-        input[type="text"] {
+        input[type="datetime-local"] {
             width: 100%;
             padding: 10px;
             margin-bottom: 20px;
@@ -82,8 +82,9 @@
         <!-- Forma -->
         <form action="{{ route('consultations.store') }}" method="POST">
             @csrf
-            <label for="title">Konsultācijas tēma:</label>
-            <input type="text" id="title" name="title" required>
+            <label for="date_time">Konsultācijas datums un laiks:</label>
+            <input type="datetime-local" id="date_time" name="date_time" required>
+
             <button type="submit">Saglabāt</button>
         </form>
     </div>

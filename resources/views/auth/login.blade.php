@@ -91,7 +91,7 @@
         <div class="auth-card">
             <!-- Logotips -->
             <div class="logo-container">
-                <img src="{{ asset('VT-logo.jpeg') }}" alt="VT Logo" class="logo">
+                <img src="{{ asset('images/VT-logo.jpeg') }}" alt="VT Logo" class="logo">
             </div>
 
             <!-- Validācijas kļūdas -->

@@ -20,18 +20,20 @@ class ConsultationController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'title' => 'required',
-        ]);
+{
+    $validated = $request->validate([
+        'date_time' => 'required|date',
+    ]);
 
-        Consultation::create([
-            'title' => $request->input('title'),
-        ]);
+  
+    $consultation = new Consultation();
+    $consultation->date_time = $validated['date_time'];
+    $consultation->save();
 
-        return redirect('/consultations')->with('success', 'Konsultācija ir veiksmīgi izveidota!');
-    }
+     return redirect('/consultations')->with('success', 'Konsultācija ir veiksmīgi izveidota!');
+}
 
+ 
     public function show(Consultation $consultation)
     {
         return view('consultations.show', ['consultation' => $consultation]);
@@ -39,23 +41,26 @@ class ConsultationController extends Controller
 
     public function edit($id)
     {
+        
         $consultation = Consultation::findOrFail($id);
         return view('consultations.edit', ['consultation' => $consultation]);
     }
 
     public function update(Request $request, $id)
-    {
-        $request->validate([
-            'title' => 'required',
-        ]);
+{
+    $request->validate([
+        'date_time' => 'required|date',
+    ]);
 
-        $consultation = Consultation::findOrFail($id);
-        $consultation->update([
-            'title' => $request->input('title'),
-        ]);
+    $consultation = Consultation::findOrFail($id);
+    $consultation->update([
+        'date_time' => $request->input('date_time'),
+    ]);
 
-        return redirect()->route('consultations.index')->with('success', 'Konsultācijas datu mainīšana ir veiksmīga');
-    }
+    return redirect()->route('consultations.index')->with('success', 'Konsultācijas datu mainīšana ir veiksmīga');
+}
+
+    
 
     public function destroy($id)
     {

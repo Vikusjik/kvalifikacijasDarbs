@@ -124,7 +124,7 @@
 <body>
     <!-- Header -->
     <div class="header">
-        <img src="images/VT-logo.jpeg" alt="Ventspils Tehnikums Logo">
+        <img src="{{ asset('images/VT-logo.jpeg') }}" alt="Ventspils Tehnikums Logo">
         <h1>Konsultāciju saraksts</h1>
     </div>
 
@@ -140,14 +140,14 @@
         <table>
             <thead>
                 <tr>
-                    <th>Tēma</th>
+                    <th>Datums un laiks</th>  <!-- Pārsauktā kolonna "Tēma" uz "Datums un laiks" -->
                     <th>Darbības</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($consultations as $consultation)
                     <tr>
-                        <td>{{ $consultation->title }}</td>
+                        <td>{{ \Carbon\Carbon::parse($consultation->date_time)->format('d.m.Y H:i') }}</td>  <!-- Parādām datumu un laiku -->
                         <td class="action-buttons">
                             <a href="{{ route('consultations.edit', $consultation->id) }}">Rediģēt</a>
                             <form action="{{ route('consultations.destroy', $consultation->id) }}" method="POST" style="display: inline;">

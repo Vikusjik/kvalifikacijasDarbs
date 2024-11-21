@@ -46,6 +46,7 @@
             gap: 15px;
             margin-top: 10px;
         }
+
         nav a, nav button {
             text-decoration: none;
             color: #333;
@@ -57,6 +58,7 @@
             background-color: white;
             cursor: pointer;
         }
+
         nav a:hover, nav button:hover {
             background-color: #007bff;
             color: white;
@@ -66,6 +68,7 @@
         .logout-form {
             margin-top: 20px;
         }
+
         .logout-form input {
             padding: 10px 20px;
             background-color: #d9534f;
@@ -77,6 +80,7 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
+
         .logout-form input:hover {
             background-color: #c9302c;
         }
@@ -95,7 +99,8 @@
         <!-- Navigācija -->
         <nav>
             <a href="{{ route('consultations.create') }}">Pievienot konsultāciju</a>
-       
+            <!-- Poga "Konsultāciju saraksts", kas novirza uz index -->
+            <a href="{{ route('consultations.index') }}">Konsultāciju saraksts</a>
         </nav>
 
         <!-- Logout poga -->

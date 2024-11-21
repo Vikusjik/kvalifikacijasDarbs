@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('consultations', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->timestamps();
+            $table->id();  // Šī kolonna pievieno automātiski palielināmo ID
+            $table->timestamp('date_time')->nullable(); // Pievieno date_time kolonnu
+            $table->timestamps(); // Šī pievieno created_at un updated_at
         });
     }
 
@@ -26,3 +26,7 @@ return new class extends Migration
         Schema::dropIfExists('consultations');
     }
 };
+
+
+   
+

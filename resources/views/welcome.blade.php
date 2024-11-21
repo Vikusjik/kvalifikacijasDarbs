@@ -10,7 +10,7 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #e6f2ff; 
-            background-image: url('VT-eka.png'); 
+            background-image: url('images/VT-eka.png'); 
             background-size: contain; 
             background-position: center; 
             background-repeat: no-repeat; 
@@ -84,7 +84,7 @@
     <div class="container">
         <!-- Logotips -->
         <div class="logo-container">
-            <img src="/VT-logo.jpeg" alt="Ventspils Tehnikums Logo" class="logo">
+            <img src="images/VT-logo.jpeg" alt="Ventspils Tehnikums Logo" class="logo">
         </div>
 
         <!-- Navigācija -->
