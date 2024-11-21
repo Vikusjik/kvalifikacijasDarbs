@@ -89,17 +89,20 @@
 
         <!-- Navigācija -->
         @if (Route::has('login'))
-            <nav>
-                @auth
-                    <a href="{{ url('/dashboard') }}">Dashboard</a>
-                @else
-                    <a href="{{ route('login') }}" class="btn">Pieslēgties</a>
-                    @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="btn">Reģistrēties</a>
-                    @endif
-                @endauth
-            </nav>
-        @endif
+    <nav>
+        @auth
+            <!-- Ja lietotājs ir parasts lietotājs, parādi "Dashboard" -->
+            @if (Auth::user()->usertype == 'user') <!-- Piemērs ar lomu "user" -->
+                <a href="{{ url('/dashboard') }}">Dashboard</a>
+            @endif
+        @else
+            <a href="{{ route('login') }}" class="btn">Pieslēgties</a>
+            @if (Route::has('register'))
+                <a href="{{ route('register') }}" class="btn">Reģistrēties</a>
+            @endif
+        @endauth
+    </nav>
+@endif
     </div>
 </body>
 </html>
