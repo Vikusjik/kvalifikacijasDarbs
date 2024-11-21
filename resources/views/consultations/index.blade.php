@@ -15,9 +15,9 @@
     <table border="1">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Actions</th>
+                <th>Konsultācijas ID</th>
+                <th>Tēma</th>
+                <th>Darbības</th>
             </tr>
         </thead>
         <tbody>

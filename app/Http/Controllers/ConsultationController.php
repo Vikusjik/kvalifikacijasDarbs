@@ -4,86 +4,64 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Consultation;
-use app\Models\Consultation\HomeController;
 
 
 class ConsultationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $consultation = Consultation::all();
-        return view('consultations.index', ['consultations'=> $consultation]);
+        $consultations = Consultation::all();
+        return view('consultations.index', compact('consultations'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('consultations.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|string|max:255', 
+            'title' => 'required',
         ]);
 
         Consultation::create([
-            'title' => $request->title, 
+            'title' => $request->input('title'),
         ]);
 
+        return redirect('/consultations')->with('success', 'Konsultācija ir veiksmīgi izveidota!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Consultation $consultation)
     {
-        //
+        return view('consultations.show', ['consultation' => $consultation]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit($id)
     {
-        $consultation = Consultation::findOrFail($id); // Atrod konkrētu ierakstu
-        return view('consultations.edit', compact('consultation'));
+        $consultation = Consultation::findOrFail($id);
+        return view('consultations.edit', ['consultation' => $consultation]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'required',
         ]);
-    
+
         $consultation = Consultation::findOrFail($id);
         $consultation->update([
-            'title' => $request->title,
+            'title' => $request->input('title'),
         ]);
 
-        return redirect()->route('consultations.index')->with('success', 'Consultation updated successfully.');
+        return redirect()->route('consultations.index')->with('success', 'Konsultācijas datu mainīšana ir veiksmīga');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy($id)
     {
         $consultation = Consultation::findOrFail($id);
-    $consultation->delete();
+        $consultation->delete();
 
-    return redirect()->route('consultations.index')->with('success', 'Consultation deleted successfully.');
-
+        return redirect('/consultations')->with('success', 'Konsultācijas dzēšana ir veiksmīga');
     }
 }

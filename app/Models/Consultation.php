@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Consultations extends Model
+class Consultation extends Model
 {
-    protected $fillable=['title'];
+    use HasFactory;
+
+    protected $fillable = ['title'];
 }

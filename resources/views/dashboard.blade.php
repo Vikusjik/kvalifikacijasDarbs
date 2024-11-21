@@ -12,6 +12,10 @@
             {{ __('Skolēnu lapa') }}
         </h2>
     </x-slot>
+    <form method="POST" action="{{ route('logout') }}" class="logout-form">
+        @csrf
+        <input type="submit" value="Izrakstīties">
+    </form>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
