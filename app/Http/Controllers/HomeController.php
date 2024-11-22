@@ -7,6 +7,7 @@ use App\Models\Consultation;
 use Illuminate\Support\Facades\Auth;
 use app\Models\Consultation\ConsultationController;
 
+
 class HomeController extends Controller
 {
     public function index()
@@ -15,12 +16,14 @@ class HomeController extends Controller
             $usertype = Auth::user()->usertype;
 
             if ($usertype == 'user') {
-                return redirect()->route('consultations.index');
+                // Novirzīšana uz lietotāja dashboard
+                return redirect()->route('students.dashboard'); // Uz dashboard maršrutu
             } elseif ($usertype == 'admin') {
-                return view ('skolotajs.home');
+                // Novirzīšana uz admin lapu
+                return view('skolotajs.home'); // Admin lapas skats
             }
         } else {
-            return redirect('login'); // Nosūta uz autentifikācijas lapu, ja nav ienācis
+            return redirect('login'); // Ja lietotājs nav pieteicies, tad nosūta uz login
         }
     }
 }
