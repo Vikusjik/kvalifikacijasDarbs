@@ -131,30 +131,41 @@
     <!-- Container -->
     <div class="container">
         <!-- Actions -->
-        <div class="actions">
-            <a href="{{ route('consultations.create') }}">Uztaisīt konsultāciju</a>
-            <a href="{{ url('/home') }}">Atpakaļ</a>
-        </div>
+        @if(Auth::user()->usertype === 'admin')
+            <div class="actions">
+                <a href="{{ route('consultations.create') }}">Uztaisīt konsultāciju</a>
+                <a href="{{ url('/home') }}">Atpakaļ</a>
+            </div>
+        @else
+            <a href="{{ url('/home') }}" class="btn">Atpakaļ</a>
+        @endif
 
         <!-- Konsultāciju saraksts -->
         <table>
             <thead>
                 <tr>
-                    <th>Datums un laiks</th>  <!-- Pārsauktā kolonna "Tēma" uz "Datums un laiks" -->
+                    <th>Datums un laiks</th> <!-- Pārsauktā kolonna "Tēma" uz "Datums un laiks" -->
                     <th>Darbības</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($consultations as $consultation)
                     <tr>
-                        <td>{{ \Carbon\Carbon::parse($consultation->date_time)->format('d.m.Y H:i') }}</td>  <!-- Parādām datumu un laiku -->
+                        <td>{{ \Carbon\Carbon::parse($consultation->date_time)->format('d.m.Y H:i') }}</td> <!-- Parādām datumu un laiku -->
                         <td class="action-buttons">
-                            <a href="{{ route('consultations.edit', $consultation->id) }}">Rediģēt</a>
-                            <form action="{{ route('consultations.destroy', $consultation->id) }}" method="POST" style="display: inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" onclick="return confirm('Vai esat pārliecināts?')">Dzēst</button>
-                            </form>
+                            @if (Auth::user()->usertype === 'admin')
+                                <a href="{{ route('consultations.edit', $consultation->id) }}">Rediģēt</a>
+                                <form action="{{ route('consultations.destroy', $consultation->id) }}" method="POST" style="display: inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" onclick="return confirm('Vai esat pārliecināts?')">Dzēst</button>
+                                </form>
+                            @else
+                                <form action="{{ route('consultations.register', $consultation->id) }}" method="POST" style="display: inline;">
+                                    @csrf
+                                    <button type="submit" class="btn">Pieteikties konsultācijai</button>
+                                </form>
+                            @endif
                         </td>
                     </tr>
                 @endforeach
