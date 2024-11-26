@@ -12,8 +12,8 @@ class Consultation extends Model
     protected $fillable = ['title'];
 
     
-    public function users()
+    public function students()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(Student::class);
     }
 }
