@@ -12,10 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('consultation_student', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('student_id')->constrained()->onDelete('cascade');
-            $table->foreignId('Consultation_id')->constrained()->onDelete('cascade');
-            $table->timestamps();
+            $table->string('topic')->nullable();
+            $table->date('date')->nullable();
+            $table->time('time')->nullable();
+            $table->string('cancellation_reason')->nullable();
+            $table->enum('status', ['gaida', 'apstiprināts', 'atcēlts'])->default('gaida');
         });
     }
 
