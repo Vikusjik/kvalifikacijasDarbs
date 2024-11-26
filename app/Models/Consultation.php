@@ -14,6 +14,9 @@ class Consultation extends Model
     
     public function students()
     {
-        return $this->belongsToMany(Student::class);
-    }
+        return $this->belongsToMany(Student::class, 'consultation_student')
+        ->withPivot(['topic', 'date', 'time', 'cancellation_reason', 'status'])
+        ->withTimestamps();
 }
+    }
+
