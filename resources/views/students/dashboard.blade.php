@@ -70,6 +70,25 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+        .button-container a {
+            text-decoration: none;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            display: inline-block;
+        }
+
+        .button-container a:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -90,9 +109,12 @@
             <input type="submit" value="Izrakstīties">
         </form>
 
-        <!-- Content Box -->
-        <div class="content-box">
-            <p>Šeit man būs saraksts</p>
+    
+
+            <!-- Konsultāciju saraksta poga -->
+            <div class="button-container">
+                <a href="{{ route('consultations.index') }}">Konsultāciju saraksts</a>
+            </div>
         </div>
     </div>
 </body>

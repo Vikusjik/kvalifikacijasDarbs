@@ -10,7 +10,7 @@ class StudentController extends Controller
 {
     $consultations = Consultation::with('students')->get(); // Atgriež konsultācijas ar studentiem
 
-    return view('consultations.index', compact('consultations'));
+    return view('students.index', compact('students'));
 }
 
 }
