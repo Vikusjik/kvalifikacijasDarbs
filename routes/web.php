@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\StudentController;
 
 
 Route::get('/', function () {
@@ -32,3 +33,6 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 
 Route::resource('consultations', ConsultationController::class);
+Route::get('/consultations/{id}/register', [StudentController::class, 'registerForm'])->name('consultations.register.form');
+Route::post('/consultations/{id}/register', [StudentController::class, 'registerSubmit'])->name('consultations.register.submit');
+

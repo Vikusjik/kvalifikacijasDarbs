@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('topic')->nullable();
             $table->date('date')->nullable();
             $table->time('time')->nullable();
+            $table->integer ('consultation_id')->nullable();
             $table->string('cancellation_reason')->nullable();
             $table->enum('status', ['gaida', 'apstiprināts', 'atcēlts'])->default('gaida');
         });

@@ -161,11 +161,18 @@
                                     <button type="submit" onclick="return confirm('Vai esat pārliecināts?')">Dzēst</button>
                                 </form>
                             @else
-                                <form action="{{ route('consultations.register', $consultation->id) }}" method="POST" style="display: inline;">
-                                    @csrf
-                                    <button type="submit" class="btn">Pieteikties konsultācijai</button>
-                                </form>
+                            <form action="{{ route('consultations.register.form', $consultation->id) }}" method="GET" style="display: inline;">
+                                @csrf
+                                <button type="submit" class="btn">Pieteikties konsultācijai</button>
+                            </form>
+                            
                             @endif
+                                @if (session('success'))
+                                    <div class="success">
+                                    {{ session('success') }}
+                                    </div>
+                                 @endif
+
                         </td>
                     </tr>
                 @endforeach
