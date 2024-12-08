@@ -82,17 +82,4 @@ class ConsultationController extends Controller
         return redirect('/consultations')->with('success', 'Konsultācijas dzēšana ir veiksmīga');
     }
 
-    
-public function register(Request $request, $id)
-{
-   
-    $consultation = Consultation::findOrFail($id);
-
-    
-    Auth::user()->consultations()->attach($consultation);
-
-    
-    return redirect()->route('consultations.index')->with('success', 'Jūs esat pieteicies uz konsultāciju!');
-}
-
 }
