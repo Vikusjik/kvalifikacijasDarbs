@@ -64,6 +64,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>Pieteikšanās konsultācijai</h1>
@@ -77,4 +78,5 @@
         </form>
     </div>
 </body>
+
 </html>

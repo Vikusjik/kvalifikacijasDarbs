@@ -20,19 +20,22 @@ class StudentController extends Controller
      return view('students.register', compact('consultation'));
  }
 
-        // Funkcija, lai apstrādātu konsultācijas tēmas iesniegšanu
-     public function registerSubmit(Request $request, $id)
- {
-     $request->validate([
-         'topic' => 'required|string|max:255',
-     ]);
+public function registerSubmit(Request $request, $id)
+{
+    $request->validate([
+        'topic' => 'required|string|max:255',
+    ]);
 
-     $consultation = Consultation::findOrFail($id);
-         // Saglabāt tēmu vai reģistrāciju
-     $consultation->students()->attach(auth()->id(), ['topic' => $request->topic]);
+    $consultation = Consultation::findOrFail($id);
+    $consultation->students()->attach(auth()->id(), ['topic' => $request->topic]);
 
-     return redirect()->route('consultations.index')->with('success', 'Jūs esat veiksmīgi pieteicies konsultācijai.');
- }
+    // Saglabā ziņu un konsultācijas ID sesijā
+    return redirect()->route('consultations.index')->with([
+        'success' => 'Jūs esat veiksmīgi pieteicies konsultācijai.',
+        'consultation_id' => $consultation->id
+    ]);
+}
+
 }
 
 

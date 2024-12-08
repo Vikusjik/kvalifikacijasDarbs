@@ -140,44 +140,36 @@
             <a href="{{ url('/home') }}" class="btn">Atpakaļ</a>
         @endif
 
-        <!-- Konsultāciju saraksts -->
         <table>
             <thead>
                 <tr>
-                    <th>Datums un laiks</th> <!-- Pārsauktā kolonna "Tēma" uz "Datums un laiks" -->
+                    <th>Datums un laiks</th> <!-- Konsultācijas laiks -->
                     <th>Darbības</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($consultations as $consultation)
                     <tr>
-                        <td>{{ \Carbon\Carbon::parse($consultation->date_time)->format('d.m.Y H:i') }}</td> <!-- Parādām datumu un laiku -->
+                        <td>{{ \Carbon\Carbon::parse($consultation->date_time)->format('d.m.Y H:i') }}</td>
                         <td class="action-buttons">
-                            @if (Auth::user()->usertype === 'admin')
-                                <a href="{{ route('consultations.edit', $consultation->id) }}">Rediģēt</a>
-                                <form action="{{ route('consultations.destroy', $consultation->id) }}" method="POST" style="display: inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" onclick="return confirm('Vai esat pārliecināts?')">Dzēst</button>
-                                </form>
-                            @else
-                            <form action="{{ route('consultations.register.form', $consultation->id) }}" method="GET" style="display: inline;">
-                                @csrf
-                                <button type="submit" class="btn">Pieteikties konsultācijai</button>
-                            </form>
-                            
-                            @endif
-                                @if (session('success'))
-                                    <div class="success">
+                            @if (session('success') && session('consultation_id') == $consultation->id)
+                                <!-- Rāda ziņojumu tikai, ja pieteikšanās bija uz šo konsultāciju -->
+                                <div class="success">
                                     {{ session('success') }}
-                                    </div>
-                                 @endif
-
+                                </div>
+                            @else
+                                <!-- Poga "Pieteikties konsultācijai" -->
+                                <form action="{{ route('consultations.register.form', $consultation->id) }}" method="GET" style="display: inline;">
+                                    @csrf
+                                    <button type="submit" class="btn">Pieteikties konsultācijai</button>
+                                </form>
+                            @endif
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
+        
     </div>
 </body>
 </html>
