@@ -23,8 +23,8 @@
         }
 
         .header img {
-            height: 80px; /* Palielināts logotipa izmērs */
-            width: auto; /* Saglabā attiecību */
+            height: 80px;
+            width: auto;
         }
 
         .header h1 {
@@ -82,7 +82,6 @@
         table th {
             background-color: #007bff;
             color: white;
-            text-align: left;
         }
 
         table tr:nth-child(even) {
@@ -119,31 +118,53 @@
         .action-buttons button:hover {
             background-color: #c9302c;
         }
+
+        /* Atpakaļ uz sākumu poga - novieto to labajā pusē */
+        .back-btn {
+            text-decoration: none;
+            background-color: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            position: absolute;  /* Izvieto absolūti */
+            right: 20px;  /* Pozicionē labajā pusē */
+            top: 20px;    /* Ievieto poga nedaudz no augšas */
+        }
+
+        .back-btn:hover {
+            background-color: #5a6268;
+        }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <div class="header">
         <img src="{{ asset('images/VT-logo.jpeg') }}" alt="Ventspils Tehnikums Logo">
         <h1>Konsultāciju saraksts</h1>
     </div>
 
-    <!-- Container -->
     <div class="container">
-        <!-- Actions -->
-        @if(Auth::user()->usertype === 'admin')
-            <div class="actions">
-                <a href="{{ route('consultations.create') }}">Uztaisīt konsultāciju</a>
-                <a href="{{ url('/home') }}">Atpakaļ</a>
+        <!-- Parādīt sesijas ziņas -->
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
             </div>
-        @else
-            <a href="{{ url('/home') }}" class="btn">Atpakaļ</a>
         @endif
+
+        @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
+
+        <!-- Poga "Atpakaļ uz sākumu" labajā pusē -->
+        <a href="{{ route('home') }}" class="back-btn">Atpakaļ uz sākumu</a>
 
         <table>
             <thead>
                 <tr>
-                    <th>Datums un laiks</th> <!-- Konsultācijas laiks -->
+                    <th>Datums un laiks</th>
                     <th>Darbības</th>
                 </tr>
             </thead>
@@ -152,24 +173,30 @@
                     <tr>
                         <td>{{ \Carbon\Carbon::parse($consultation->date_time)->format('d.m.Y H:i') }}</td>
                         <td class="action-buttons">
-                            @if (session('success') && session('consultation_id') == $consultation->id)
-                                <!-- Rāda ziņojumu tikai, ja pieteikšanās bija uz šo konsultāciju -->
-                                <div class="success">
-                                    {{ session('success') }}
-                                </div>
-                            @else
-                                <!-- Poga "Pieteikties konsultācijai" -->
-                                <form action="{{ route('consultations.register.form', $consultation->id) }}" method="GET" style="display: inline;">
+                            @if(Auth::user()->usertype === 'admin')
+                                <a href="{{ route('consultations.edit', $consultation->id) }}" class="btn">Rediģēt</a>
+
+                                <form action="{{ route('consultations.destroy', $consultation->id) }}" method="POST" style="display: inline;">
                                     @csrf
-                                    <button type="submit" class="btn">Pieteikties konsultācijai</button>
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Vai tiešām vēlaties dzēst šo konsultāciju?')">Dzēst</button>
                                 </form>
+                            @else
+                                <!-- Pārbaudīt, vai students jau ir pieteicies uz konsultāciju -->
+                                @if(!$consultation->students->contains('id', auth()->id()))
+                                    <form action="{{ route('consultations.register.form', $consultation->id) }}" method="GET" style="display: inline;">
+                                        @csrf
+                                        <button type="submit" class="btn">Pieteikties konsultācijai</button>
+                                    </form>
+                                @else
+                                    <span class="btn" style="background-color: #6c757d;">Jūs jau esat pieteicies</span>
+                                @endif
                             @endif
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
-        
     </div>
 </body>
 </html>
