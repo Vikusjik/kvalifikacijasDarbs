@@ -114,6 +114,7 @@
             <!-- Konsultāciju saraksta poga -->
             <div class="button-container">
                 <a href="{{ route('consultations.index') }}">Konsultāciju saraksts</a>
+                <a href="{{ route('myConsultation.index') }}" class="btn">Manas konsultācijas</a>
             </div>
         </div>
     </div>

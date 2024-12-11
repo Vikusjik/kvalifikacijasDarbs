@@ -9,14 +9,19 @@ class Consultation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title'];
+    protected $fillable = ['topic', 'date_time', 'is_active'];
 
-    
-    public function students()
+    protected $casts = [
+        'date_time' => 'datetime', 
+    ];
+
+    public function users()
     {
-        return $this->belongsToMany(Student::class, 'consultation_student')
-        ->withPivot(['topic', 'date', 'time', 'cancellation_reason', 'status'])
-        ->withTimestamps();
-}
+        return $this->belongsToMany(User::class, 'my_consultations')
+                    ->withPivot('topic')
+                    ->withTimestamps();
     }
+
+}
+    
 

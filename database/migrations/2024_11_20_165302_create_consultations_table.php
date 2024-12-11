@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('consultations', function (Blueprint $table) {
             $table->id();  // Šī kolonna pievieno automātiski palielināmo ID
             $table->timestamp('date_time')->nullable(); // Pievieno date_time kolonnu
+            $table->boolean('is_active')->default(true);
             $table->timestamps(); // Šī pievieno created_at un updated_at
         });
     }

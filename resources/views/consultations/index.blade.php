@@ -136,6 +136,20 @@
         .back-btn:hover {
             background-color: #5a6268;
         }
+
+        /* Hide the form by default */
+        .topic-form {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .topic-form input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -171,7 +185,8 @@
             <tbody>
                 @foreach ($consultations as $consultation)
                     <tr>
-                        <td>{{ \Carbon\Carbon::parse($consultation->date_time)->format('d.m.Y H:i') }}</td>
+                        <td>{{ $consultation->date_time->format('d.m.Y H:i') }}</td>
+
                         <td class="action-buttons">
                             @if(Auth::user()->usertype === 'admin')
                                 <a href="{{ route('consultations.edit', $consultation->id) }}" class="btn">Rediģēt</a>
@@ -181,15 +196,19 @@
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger" onclick="return confirm('Vai tiešām vēlaties dzēst šo konsultāciju?')">Dzēst</button>
                                 </form>
+                                
+                                <a href="{{ route('consultations.show', $consultation->id) }}">Show</a>
                             @else
-                                <!-- Pārbaudīt, vai students jau ir pieteicies uz konsultāciju -->
-                                @if(!$consultation->students->contains('id', auth()->id()))
-                                    <form action="{{ route('consultations.register.form', $consultation->id) }}" method="GET" style="display: inline;">
+                                @if(!$consultation->users->contains('id', auth()->id()))
+                                    <!-- Button to show form -->
+                                    <button onclick="toggleForm({{ $consultation->id }})">Pieteikties</button>
+                                    <form method="POST" action="{{ route('consultations.register.submit', $consultation->id) }}" id="form-{{ $consultation->id }}" class="topic-form">
                                         @csrf
-                                        <button type="submit" class="btn">Pieteikties konsultācijai</button>
+                                        <input type="text" id="topic" name="topic" placeholder="Ievadiet tēmu" required>
+                                        <button type="submit">Apstiprināt</button>
                                     </form>
                                 @else
-                                    <span class="btn" style="background-color: #6c757d;">Jūs jau esat pieteicies</span>
+                                    <span>Jūs jau esat pieteicies</span>
                                 @endif
                             @endif
                         </td>
@@ -198,5 +217,13 @@
             </tbody>
         </table>
     </div>
+
+    <script>
+        // Function to toggle the visibility of the form
+        function toggleForm(consultationId) {
+            var form = document.getElementById('form-' + consultationId);
+            form.style.display = form.style.display === 'block' ? 'none' : 'block';
+        }
+    </script>
 </body>
 </html>
