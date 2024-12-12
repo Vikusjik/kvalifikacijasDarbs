@@ -8,115 +8,103 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
+            background-color: #e6f2ff;
+            background-image: url('images/VT-eka.png');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #333;
             margin: 0;
             padding: 0;
-        }
-
-        .header {
-            background-color: #007bff;
-            color: white;
-            padding: 15px 20px;
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .header h1 {
-            margin: 0;
-            font-size: 24px;
+            flex-direction: column;
+            min-height: 100vh;
+            justify-content: flex-end;
         }
 
         .container {
             max-width: 900px;
-            margin: 20px auto;
+            margin: 0 auto;
             padding: 20px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
         }
 
-        h2 {
+        .header {
             text-align: center;
             margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 28px;
             color: #007bff;
+            margin: 0;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            background-color: white;
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            border: 1px solid #ddd;
+            transition: all 0.3s ease-in-out;
+        }
+
+        nav a:hover {
+            background-color: #007bff;
+            color: white;
+            border-color: #0056b3;
         }
 
         .logout-form {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 20px;
+            margin-top: 20px;
         }
 
         .logout-form input {
+            padding: 10px 20px;
             background-color: #d9534f;
             color: white;
-            padding: 10px 20px;
-            border: none;
             border-radius: 5px;
+            font-weight: bold;
+            border: none;
             cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s ease-in-out;
         }
 
         .logout-form input:hover {
             background-color: #c9302c;
         }
-
-        .content-box {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        .button-container {
-            margin-top: 20px;
-        }
-
-        .button-container a {
-            text-decoration: none;
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: background-color 0.3s;
-            display: inline-block;
-        }
-
-        .button-container a:hover {
-            background-color: #0056b3;
-        }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <div class="header">
-        <h1>Skolēnu lapa</h1>
-    </div>
-
-    <!-- Main Content -->
     <div class="container">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Skolēnu lapa') }}
-        </h2>
-        
-        <!-- Logout Form -->
+        <!-- Header -->
+        <div class="header">
+            <h1>Skolēnu lapa</h1>
+        </div>
+
+        <!-- Navigācija -->
+        <nav>
+            <a href="{{ route('consultations.index') }}">Konsultāciju saraksts</a>
+            <a href="{{ route('myConsultation.index') }}">Manas konsultācijas</a>
+        </nav>
+
+        <!-- Logout -->
         <form method="POST" action="{{ route('logout') }}" class="logout-form">
             @csrf
             <input type="submit" value="Izrakstīties">
         </form>
-
-    
-
-            <!-- Konsultāciju saraksta poga -->
-            <div class="button-container">
-                <a href="{{ route('consultations.index') }}">Konsultāciju saraksts</a>
-                <a href="{{ route('myConsultation.index') }}" class="btn">Manas konsultācijas</a>
-            </div>
-        </div>
     </div>
 </body>
 </html>
