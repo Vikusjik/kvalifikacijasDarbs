@@ -51,6 +51,9 @@ class ConsultationController extends Controller
     // Konsultācijas rādīšana
     public function show(Consultation $consultation)
     {
+        if ($consultation->created_by !== auth()->id()) {
+            return redirect('/consultations')->with('error', 'Jums nav tiesību skatīties studentu sarakstu.');
+           }
     
         // Useru ielāde, saistītus ar konsultāciju
         $consultation->load('users'); 
@@ -63,15 +66,21 @@ class ConsultationController extends Controller
     // Konsultācijas rediģēšana
     public function edit($id)
     {
-        // Pārbaudām, vai lietotājs ir skolotājs
+        // Parbaudam vai user ir skolotājs
         if (auth()->user()->usertype !== 'admin') {
-            return redirect('/consultations')->with('error', 'Nav tiesību rediģēt šo konsultāciju.');
+         return redirect('/consultations')->with('error', 'Nav tiesību rediģēt šo konsultāciju.');
         }
 
         $consultation = Consultation::findOrFail($id);
+
+        //Parbaudam to, vai tekošais user ir konsultācijas izveidotajs 
+        if ($consultation->created_by !== auth()->id()) {
+         return redirect('/consultations')->with('error', 'Jums nav tiesību rediģēt šo konsultāciju.');
+        }
+
         return view('consultations.edit', ['consultation' => $consultation]);
     }
-
+   
     // Konsultācijas atjaunināšana
     public function update(Request $request, $id)
     {
@@ -93,8 +102,8 @@ class ConsultationController extends Controller
         return redirect()->route('consultations.index')->with('success', 'Konsultācija veiksmīgi atjaunināta!');
     }
 
-    // Konsultācijas dzēšana
-    public function destroy($id)
+        // Konsultācijas dzēšana
+        public function destroy($id)
     {
         // Pārbaudām, vai lietotājs ir skolotājs
         if (auth()->user()->usertype !== 'admin') {
@@ -102,10 +111,17 @@ class ConsultationController extends Controller
         }
 
         $consultation = Consultation::findOrFail($id);
+
+        //Parbaudam to, vai tekošais user ir konsultācijas izveidotajs 
+        if ($consultation->created_by !== auth()->id()) {
+            return redirect('/consultations')->with('error', 'Jums nav tiesību dzēst šo konsultāciju.');
+        }
+
         $consultation->delete();
 
         return redirect('/consultations')->with('success', 'Konsultācija veiksmīgi dzēsta!');
     }
+   
 
     public function registerAndAssign(Request $request, Consultation $consultation)
     {
