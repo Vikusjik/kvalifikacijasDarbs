@@ -198,7 +198,7 @@
                                     <button type="submit" class="btn btn-danger" onclick="return confirm('Vai tiešām vēlaties dzēst šo konsultāciju?')">Dzēst</button>
                                 </form>
                                 
-                                <a href="{{ route('consultations.show', $consultation->id) }}">Show</a>
+                                <a href="{{ route('consultations.show', $consultation->id) }}">Pieteiktie skolēni</a>
                             @else
                                 @if(!$consultation->users->contains('id', auth()->id()))
                                     <!-- Button to show form -->
