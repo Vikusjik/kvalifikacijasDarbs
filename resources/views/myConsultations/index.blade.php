@@ -47,26 +47,6 @@
             color: #007bff;
         }
 
-        .actions {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .actions a {
-            text-decoration: none;
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-
-        .actions a:hover {
-            background-color: #0056b3;
-        }
-
         table {
             width: 100%;
             border-collapse: collapse;
@@ -92,7 +72,7 @@
             background-color: #f1f1f1;
         }
 
-        .action-buttons a, .action-buttons button {
+        .action-buttons button {
             text-decoration: none;
             padding: 8px 15px;
             border-radius: 5px;
@@ -101,25 +81,36 @@
             border: none;
             cursor: pointer;
             transition: background-color 0.3s;
-        }
-
-        .action-buttons a {
             background-color: #007bff;
         }
 
-        .action-buttons a:hover {
+        .action-buttons button:hover {
             background-color: #0056b3;
         }
 
-        .action-buttons button {
-            background-color: #d9534f;
+        .reason-form {
+            display: none;
+            margin-top: 10px;
         }
 
-        .action-buttons button:hover {
+        .reason-form textarea, .reason-form button {
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .reason-form button {
+            background-color: #d9534f;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .reason-form button:hover {
             background-color: #c9302c;
         }
 
-        /* Atpakaļ uz sākumu poga - novieto to labajā pusē */
         .back-btn {
             text-decoration: none;
             background-color: #6c757d;
@@ -127,19 +118,17 @@
             padding: 10px 20px;
             border-radius: 5px;
             font-size: 16px;
-            transition: background-color 0.3s;
-            position: absolute;  /* Izvieto absolūti */
-            right: 20px;  /* Pozicionē labajā pusē */
-            top: 20px;    /* Ievieto poga nedaudz no augšas */
+            position: absolute;
+            right: 20px;
+            top: 20px;
         }
-        .reason-form {
-            display: none;
+
+        .back-btn:hover {
+            background-color: #5a6268;
         }
-        
     </style>
 </head>
 <body>
-    
     <div class="header">
         <img src="{{ asset('images/VT-logo.jpeg') }}" alt="Ventspils Tehnikums Logo">
         <h1>Konsultāciju saraksts</h1>
@@ -159,103 +148,58 @@
             </div>
         @endif
 
-        <!-- Poga "Atpakaļ uz sākumu" labajā pusē -->
         <a href="{{ route('home') }}" class="back-btn">Atpakaļ uz sākumu</a>
         <h1>Manas konsultācijas</h1>
-        
+
         @if($myConsultations->isEmpty())
             <p>Jūs neesat pieteicies nevienai konsultācijai.</p>
         @else
-        <ul>
-            @foreach($myConsultations as $consultation)
-                <li>
-                    <strong>{{ $consultation->date_time->format('d.m.Y H:i') }}</strong>
-                    <p>Tēma: {{ $consultation->pivot->topic }}</p>
-                    @if($consultation->is_active)
-                        <span>Aktīva</span>
-                    @else
-                        <span>Noslēgta</span>
-                    @endif
-                    
+            <table>
+                <thead>
+                    <tr>
+                        <th>Datums un laiks</th>
+                        <th>Izveidoja</th>
+                        <th>Tēma</th>
+                        <th>Darbības</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($myConsultations as $consultation)
+                        <tr>
+                            <td>{{ $consultation->date_time->format('d.m.Y H:i') }}</td>
+                            <td>{{ $consultation->creator->name ?? 'Nezināms' }}</td>
+                            <td>{{ $consultation->pivot->topic ?? 'Nav norādīts' }}</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="toggle-reason-btn" data-id="{{ $consultation->id }}">Atteikties</button>
+                                </div>
 
-                    @if($consultation->is_active)
-                <div class="action-buttons">
-                    <button class="toggle-reason-btn" data-id="{{ $consultation->id }}">Atteikties</button>
-
-                    <button class="edit-btn" data-id="{{ $consultation->id }}">Rediģēt</button>
-
-                <!-- Скрытая форма удаления-->
-                <form id="reason-form-{{ $consultation->id }}" class="reason-form" action="{{ route('myConsultation.cancel', $consultation->id) }}" method="POST" style="display: none; margin-top: 10px;">
-                    @csrf
-                    <textarea name="reason" placeholder="Norādiet iemeslu" required></textarea>
-                    <button type="submit" class="btn">Apstiprināt</button>
-                </form>
-
-                <!-- Скрытая форма редактирования -->
-                <form id="edit-form-{{ $consultation->id }}" class="edit-form" action="{{ route('myConsultation.update', $consultation->id) }}" method="POST" style="display: none; margin-top: 10px;">
-                @csrf
-                @method('PUT')
-
-                <!-- Поле для редактирования темы -->
-                <label for="topic-{{ $consultation->id }}">Jauna tēma:</label>
-                <input type="text" id="topic-{{ $consultation->id }}" name="topic" value="{{ $consultation->pivot->reason }}" required>
-
-                <!-- Выпадающий список с доступными консультациями -->
-                <label for="new_consultation-{{ $consultation->id }}">Izvēlieties citu laiku:</label>
-                <select id="new_consultation-{{ $consultation->id }}" name="new_consultation_id" required>
-                    <option value="">Izvēlieties konsultāciju</option>
-                    @foreach($availableConsultations as $available)
-                        <option value="{{ $available->id }}" {{ $available->id == $consultation->id ? 'selected' : '' }}>
-                            {{ $available->date_time->format('d.m.Y H:i') }}
-                        </option>
+                                <!-- Paslēpta atteikšanās forma -->
+                                <form id="reason-form-{{ $consultation->id }}" class="reason-form" action="{{ route('myConsultation.cancel', $consultation->id) }}" method="POST">
+                                    @csrf
+                                    <textarea name="reason" placeholder="Norādiet iemeslu" required></textarea>
+                                    <button type="submit">Apstiprināt</button>
+                                </form>
+                            </td>
+                        </tr>
                     @endforeach
-                </select>
-
-                <button type="submit">Saglabāt</button>
-                </form>
-                </div>
-                    @endif
-                </li>
-            @endforeach
-        </ul>
-
+                </tbody>
+            </table>
         @endif
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggleButtons = document.querySelectorAll('.toggle-reason-btn');
+
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const consultationId = button.getAttribute('data-id');
+                    const form = document.getElementById(`reason-form-${consultationId}`);
+                    form.style.display = form.style.display === 'none' || form.style.display === '' ? 'block' : 'none';
+                });
+            });
+        });
+    </script>
 </body>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Находим все кнопки
-        const toggleButtons = document.querySelectorAll('.toggle-reason-btn');
-
-        toggleButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                // Получаем ID консультации из data-id
-                const consultationId = button.getAttribute('data-id');
-                
-                // Находим соответствующую форму
-                const form = document.getElementById(`reason-form-${consultationId}`);
-                
-                // Переключаем видимость формы
-                if (form.style.display === 'none' || form.style.display === '') {
-                    form.style.display = 'block';
-                } else {
-                    form.style.display = 'none';
-                }
-            });
-        });
-    });
-
-    document.addEventListener('DOMContentLoaded', function () {
-        const editButtons = document.querySelectorAll('.edit-btn');
-
-        editButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                const consultationId = button.getAttribute('data-id');
-                const form = document.getElementById(`edit-form-${consultationId}`);
-                form.style.display = form.style.display === 'none' || form.style.display === '' ? 'block' : 'none';
-            });
-        });
-    });
-</script>
-
 </html>

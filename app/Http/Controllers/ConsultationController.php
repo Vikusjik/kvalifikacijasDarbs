@@ -10,9 +10,9 @@ class ConsultationController extends Controller
     // Konsultāciju saraksts
     public function index()
     {
-        $consultations = Consultation::where('is_active', 1) // Отбираем только активные консультации
+        $consultations = Consultation::where('is_active', 1) // Tikai aktīvas konsultācijas
         ->whereDoesntHave('users', function ($query) {
-            $query->where('user_id', auth()->id());  // Исключаем консультации, на которые уже записан текущий пользователь
+            $query->where('user_id', auth()->id());  // Izmetam konsultācijas pie kuiram jau esot
         })
         ->get();
 
@@ -42,6 +42,7 @@ class ConsultationController extends Controller
         $consultation = new Consultation();
         $consultation->date_time = $validated['date_time'];
         $consultation->is_active = true;
+        $consultation->created_by = auth()->id(); // Saglabā ID tekošam userim
         $consultation->save();
 
         return redirect('/consultations')->with('success', 'Konsultācija ir veiksmīgi izveidota!');
@@ -51,8 +52,8 @@ class ConsultationController extends Controller
     public function show(Consultation $consultation)
     {
     
-        // Загрузка пользователей, связанных с консультацией, и их тем
-        $consultation->load('users'); // Предполагается, что у вас есть связь `users` в модели Consultation
+        // Useru ielāde, saistītus ar konsultāciju
+        $consultation->load('users'); 
 
         return view('consultations.show', [
             'consultation' => $consultation,
@@ -108,25 +109,25 @@ class ConsultationController extends Controller
 
     public function registerAndAssign(Request $request, Consultation $consultation)
     {
-        // Валидация темы консультации
+        // Tēmas validācija
         $request->validate([
             'topic' => 'required|string|max:255',
         ]);
     
-        // Проверка, активна ли консультация
-        if ($consultation->is_active == 1) {  // Проверка на активность консультации
-            // Проверяем, записан ли уже пользователь на консультацию
+       
+        if ($consultation->is_active == 1) {  // Parbaudam vai konsultācija ir aktīva
+            // Parbaudam vai user ir jau piekastits uz konsultaciju
             if ($consultation->users->contains('id', auth()->id())) {
-                return back()->with('error', 'Вы уже записаны на эту консультацию!');
+                return back()->with('error', 'Jūs jau esat pierakstīts uz šo konsultāciju!');
             }
     
-            // Добавление записи в таблицу my_consultations с темой
+            // Pieveino ierakstu tabulā my_consultations ar temu
             $consultation->users()->attach(auth()->id(), ['topic' => $request->topic]);
     
-            return redirect()->route('myConsultation.index')->with('success', 'Вы успешно записались на консультацию!');
+            return redirect()->route('myConsultation.index')->with('success', 'Jūs esat veiksmīgi pieteicies konsultācijai!');
         }
     
-        return back()->with('error', 'Консультация была закрыта или завершена!');
+        return back()->with('error', 'Konsultācija bija aizvērta vai pabeigta!');
     }
    
 

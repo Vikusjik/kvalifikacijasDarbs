@@ -178,6 +178,7 @@
         <table>
             <thead>
                 <tr>
+                    <th>Skolotājs</th>
                     <th>Datums un laiks</th>
                     <th>Darbības</th>
                 </tr>
@@ -185,8 +186,8 @@
             <tbody>
                 @foreach ($consultations as $consultation)
                     <tr>
+                        <td>{{ $consultation->creator->name ?? 'Nezināms' }}</td> <!-- Parādam skolotāja vārdu un uzvārdu -->
                         <td>{{ $consultation->date_time->format('d.m.Y H:i') }}</td>
-
                         <td class="action-buttons">
                             @if(Auth::user()->usertype === 'admin')
                                 <a href="{{ route('consultations.edit', $consultation->id) }}" class="btn">Rediģēt</a>
