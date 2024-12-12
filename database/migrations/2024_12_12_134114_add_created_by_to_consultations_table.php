@@ -11,17 +11,17 @@ return new class extends Migration
      */
     public function up()
 {
-Schema::table('consultations', function (Blueprint $table) {
-$table->unsignedBigInteger('created_by')->nullable(); // ID учителя
-$table->foreign('created_by')->references('id')->on('users')->onDelete('cascade'); // Связь с таблицей пользователей
-});
+        Schema::table('consultations', function (Blueprint $table) {
+        $table->unsignedBigInteger('created_by')->nullable(); //Skolotāju ID 
+        $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade'); // Saistiba ar useru tabulu  
+        });
 }
 
 public function down()
 {
-Schema::table('consultations', function (Blueprint $table) {
-$table->dropForeign(['created_by']);
-$table->dropColumn('created_by');
-});
+        Schema::table('consultations', function (Blueprint $table) {
+        $table->dropForeign(['created_by']);
+        $table->dropColumn('created_by');
+    });
 }
 };
