@@ -18,7 +18,6 @@ return new class extends Migration
             $table->timestamps(); // Šī pievieno created_at un updated_at
         });
     }
-
     /**
      * Reverse the migrations.
      */
