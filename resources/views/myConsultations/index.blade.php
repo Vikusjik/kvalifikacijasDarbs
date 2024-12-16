@@ -132,7 +132,12 @@
             right: 20px;  /* Pozicionē labajā pusē */
             top: 20px;    /* Ievieto poga nedaudz no augšas */
         }
+
         .reason-form {
+            display: none;
+        }
+
+        .edit-form {
             display: none;
         }
         
@@ -178,65 +183,59 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($myConsultations as $consultation)
-                        <tr>
-                            <td>{{ $consultation->date_time->format('d.m.Y H:i') }}</td>
-                            <td>{{ $consultation->creator->name ?? 'Nezināms' }}</td>
-                            <td>{{ $consultation->pivot->topic ?? 'Nav norādīts' }}</td>
-                            <td>
-                                <!-- Darbības -->
-                                @if($consultation->is_active)
-                                    <div class="action-buttons">
-                                        <button class="edit-btn" data-id="{{ $consultation->id }}">Rediģēt</button> 
-                                        <button class="toggle-reason-btn" data-id="{{ $consultation->id }}">Atteikties</button>
+                    <tr>
+                        <td>{{ $consultation->date_time->format('d.m.Y H:i') }}</td>
+                        <td>{{ $consultation->creator->name ?? 'Nezināms' }}</td>
+                        <td>{{ $consultation->pivot->topic ?? 'Nav norādīts' }}</td>
+                        <td>
+                            <!-- Darbības -->
+                            @if($consultation->is_active)
+                                <div class="action-buttons">
+                                    <button class="edit-btn" data-id="{{ $consultation->id }}">Rediģēt</button>
+                                    <button class="toggle-reason-btn" data-id="{{ $consultation->id }}">Atteikties</button>
 
-                                       
+                                    <!-- Paslēpta dzēšanas forma-->
+                                    <form id="reason-form-{{ $consultation->id }}" class="reason-form" action="{{ route('myConsultation.cancel', $consultation->id) }}" method="POST" style="display: none; margin-top: 10px;">
+                                        @csrf
+                                        <textarea name="reason" placeholder="Norādiet iemeslu" required></textarea>
+                                        <button type="submit" class="btn">Apstiprināt</button>
+                                    </form>
 
-                                        <!-- Paslēpta dzēšanas forma-->
-                                        <form id="reason-form-{{ $consultation->id }}" class="reason-form" action="{{ route('myConsultation.cancel', $consultation->id) }}" method="POST" style="display: none; margin-top: 10px;">
-                                            @csrf
-                                            <textarea name="reason" placeholder="Norādiet iemeslu" required></textarea>
-                                            <button type="submit" class="btn">Apstiprināt</button>
-                                        </form>
+                                    <!-- Paslēpta rediģēšanas forma-->
+                                    <form id="edit-form-{{ $consultation->id }}" class="edit-form" action="{{ route('myConsultation.update', $consultation->id) }}" method="POST" style="display: none; margin-top: 10px;">
+                                        @csrf
+                                        @method('PUT')
 
-                                        <!-- Paslēpta rediģēsānas forma-->
-                                        <form id="edit-form-{{ $consultation->id }}" class="edit-form" action="{{ route('myConsultation.update', $consultation->id) }}" method="POST" style="display: none; margin-top: 10px;">
-                                            @csrf
-                                            @method('PUT')
+                                        <!-- Tēmas rediģēšanas lauks -->
+                                        <label for="topic-{{ $consultation->id }}">Jauna tēma:</label>
+                                        <input type="text" id="topic-{{ $consultation->id }}" name="topic" value="{{ $consultation->pivot->topic ?? '' }}" required>
 
-                                            <!-- Tēmas rediģēsanas lauks -->
-                                            <label for="topic-{{ $consultation->id }}">Jauna tēma:</label>
-                                            <input type="text" id="topic-{{ $consultation->id }}" name="topic" value="{{ $consultation->pivot->reason }}" required>
+                                        <!-- Dropdown ar konsultācijām -->
+                                        <label for="new_consultation-{{ $consultation->id }}">Izvēlieties citu laiku:</label>
+                                        <select id="new_consultation-{{ $consultation->id }}" name="new_consultation_id" required>
+                                            <option value="">Izvēlieties konsultāciju</option>
+                                            @foreach($availableConsultations as $available)
+                                                <option value="{{ $available->id }}" {{ $available->id == $consultation->id ? 'selected' : '' }}>
+                                                    {{ $available->date_time->format('d.m.Y H:i') }}
+                                                </option>
+                                            @endforeach
+                                        </select>
 
-                                            <!-- Dropdown ar konsultācijam -->
-                                            <label for="new_consultation-{{ $consultation->id }}">Izvēlieties citu laiku:</label>
-                                            <select id="new_consultation-{{ $consultation->id }}" name="new_consultation_id" required>
-                                                <option value="">Izvēlieties konsultāciju</option>
-                                                @foreach($availableConsultations as $available)
-                                                    <option value="{{ $available->id }}" {{ $available->id == $consultation->id ? 'selected' : '' }}>
-                                                        {{ $available->date_time->format('d.m.Y H:i') }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-
-                                            <button type="submit">Saglabāt</button>
-                                        </form>
-                                    </div>
-                                @endif
-                            </td>
-                        </tr>
-                    @endforeach
+                                        <button type="submit">Saglabāt</button>
+                                    </form>
+                                </div>
+                            @endif
+                        </td>
+                    </tr>
                 </tbody>
             </table>
-
-                 
-                </li>
             @endforeach
         </ul>
-
         @endif
     </div>
+
 </body>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Visas pogas
@@ -244,13 +243,13 @@
 
         toggleButtons.forEach(button => {
             button.addEventListener('click', function () {
-                // Saņēmam konsultacijas ID no data-id
+                // Saņēmam konsultācijas ID no data-id
                 const consultationId = button.getAttribute('data-id');
                 
                 // Atrodam atbilstošo formu
                 const form = document.getElementById(`reason-form-${consultationId}`);
                 
-                // Mainam formas redzamību
+                // Mainām formas redzamību
                 if (form.style.display === 'none' || form.style.display === '') {
                     form.style.display = 'block';
                 } else {
