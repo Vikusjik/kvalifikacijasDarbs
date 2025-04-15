@@ -124,28 +124,29 @@ class ConsultationController extends Controller
    
 
     public function registerAndAssign(Request $request, Consultation $consultation)
-    {
-        // Tēmas validācija
-        $request->validate([
-            'topic' => 'required|string|max:255',
-        ]);
-    
-       
-        if ($consultation->is_active == 1) {  // Parbaudam vai konsultācija ir aktīva
-            // Parbaudam vai user ir jau piekastits uz konsultaciju
-            if ($consultation->users->contains('id', auth()->id())) {
-                return back()->with('error', 'Jūs jau esat pierakstīts uz šo konsultāciju!');
-            }
-    
-            // Pieveino ierakstu tabulā my_consultations ar temu
-            $consultation->users()->attach(auth()->id(), ['topic' => $request->topic]);
-    
-            return redirect()->route('myConsultation.index')->with('success', 'Jūs esat veiksmīgi pieteicies konsultācijai!');
+{
+    $request->validate([
+        'topic' => 'required|string|max:255',
+    ]);
+
+    if ($consultation->is_active == 1) {
+        if ($consultation->users()->where('user_id', auth()->id())->exists()) {
+            return back()->with('error', 'Jūs jau esat pierakstīts uz šo konsultāciju!');
         }
-    
-        return back()->with('error', 'Konsultācija bija aizvērta vai pabeigta!');
+
+        // Limita parbaude
+        if ($consultation->users()->count() >= 10) {
+            return back()->with('error', 'Šī konsultācija jau ir pilna (maks. 10 studenti).');
+        }
+
+        $consultation->users()->attach(auth()->id(), ['topic' => $request->topic]);
+
+        return redirect()->route('myConsultation.index')->with('success', 'Jūs esat veiksmīgi pieteicies konsultācijai!');
     }
-   
+
+    return back()->with('error', 'Konsultācija bija aizvērta vai pabeigta!');
+}
+
 
 
 }

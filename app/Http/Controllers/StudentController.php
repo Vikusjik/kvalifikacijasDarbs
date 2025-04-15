@@ -27,21 +27,28 @@ class StudentController extends Controller
     }
 
     public function registerSubmit(Request $request, $id)
-{
-    $request->validate([
-        'topic' => 'required|string|max:255',
-    ]);
-
-    $consultation = Consultation::findOrFail($id);
+    {
+        $request->validate([
+            'topic' => 'required|string|max:255',
+        ]);
     
-    // Pievieno studenta pieteikšanos uz konsultāciju
-    $consultation->students()->attach(auth()->id(), ['topic' => $request->topic]);
-
-    // Saglabā ziņu un konsultācijas ID sesijā
-    return redirect()->route('consultations.index')->with('success', 'Jūs esat veiksmīgi pieteicies konsultācijai.');
-}
-
-
+        $consultation = Consultation::findOrFail($id);
+    
+        // Limits - max 10 studenti
+        if ($consultation->students()->count() >= 10) {
+            return redirect()->back()->with('error', 'Šī konsultācija jau ir pilna (maks. 10 studenti).');
+        }
+    
+        // Parbauda, vai nav pierakstits
+        if ($consultation->students()->where('user_id', auth()->id())->exists()) {
+            return redirect()->back()->with('error', 'Jūs jau esat pierakstīts uz šo konsultāciju.');
+        }
+    
+        $consultation->students()->attach(auth()->id(), ['topic' => $request->topic]);
+    
+        return redirect()->route('consultations.index')->with('success', 'Jūs esat veiksmīgi pieteicies konsultācijai.');
+    }
+    
     }
 
 
