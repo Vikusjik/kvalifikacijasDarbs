@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Consultation;
 use Illuminate\Http\Request;
+use App\Notifications\ConsultationCancelled;
 
 class MyConsultationController extends Controller
 {
@@ -22,19 +23,32 @@ class MyConsultationController extends Controller
         ], compact('myConsultations'));
     }
 
-    public function cancel(Request $request, $consultationId)
+public function cancel(Request $request, $consultationId)
 {
-    // Saņēmam konsultāciju pēc ID
     $consultation = Consultation::findOrFail($consultationId);
 
-    // Dzēšam  usera ierakstu no konsultācijam  
+    // Saglābājam atteikšanas iemeslu (pirms dzēšanas!)
+    $consultation->users()->updateExistingPivot(auth()->id(), [
+        'reason' => $request->input('reason')
+    ]);
+
+    //Noņemam studentu no konsultacijas
     $consultation->users()->detach(auth()->id());
 
-    // Saglābājam atcēlšanas iemēslu tabulā my_consultations
-    $consultation->users()->updateExistingPivot(auth()->id(), ['reason' => $request->input('reason')]);
+    // Saņemam skolotāju
+    $teacher = $consultation->creator;
 
-    return redirect()->route('myConsultation.index')->with('success', 'Konsultācija ir atcēlta. Iemesls: ' . $request->input('reason'));
+    // Sūtam paziņojumu
+    $teacher->notify(new ConsultationCancelled(
+        $consultation,
+        $request->input('reason'),
+        auth()->user()
+    ));
+
+    return redirect()->route('myConsultation.index')
+        ->with('success', 'Konsultācija ir atcēlta. Iemesls: ' . $request->input('reason'));
 }
+
 
     public function update(Request $request, Consultation $consultation)
     {

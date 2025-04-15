@@ -6,6 +6,8 @@ use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\MyConsultationController;
+use App\Models\Notification;
+
 
 
 Route::get('/', function () {
@@ -42,3 +44,12 @@ Route::resource('consultations', ConsultationController::class);
 Route::get('/consultations/{id}/register', [StudentController::class, 'registerForm'])->name('consultations.register.form');
 Route::post('/consultations/{id}/register', [StudentController::class, 'registerSubmit'])->name('consultations.register.submit');
 
+Route::delete('/notifications/{notification}', function ($notificationId) {
+    // Atradam pec ID
+    $notification = Auth::user()->notifications()->findOrFail($notificationId);
+    
+    // dzešam paziņojumu
+    $notification->delete();
+    
+    return redirect()->back(); 
+})->name('notifications.delete');

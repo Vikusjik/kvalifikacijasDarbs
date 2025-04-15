@@ -19,12 +19,12 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            justify-content: flex-end;
+            justify-content: flex-start;
         }
 
         .container {
             max-width: 900px;
-            margin: 0 auto;
+            margin: 20px auto;
             padding: 20px;
             background-color: rgba(255, 255, 255, 0.9);
             border-radius: 15px;
@@ -40,11 +40,16 @@
             height: auto;
         }
 
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
         nav {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin-top: 10px;
+            gap: 20px;
+            margin-top: 20px;
         }
 
         nav a, nav button {
@@ -66,7 +71,7 @@
         }
 
         .logout-form {
-            margin-top: 20px;
+            margin-top: 30px;
         }
 
         .logout-form input {
@@ -84,6 +89,69 @@
         .logout-form input:hover {
             background-color: #c9302c;
         }
+
+        .notification {
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            position: relative;
+        }
+
+        .notification strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .notification small {
+            display: block;
+            color: #555;
+        }
+
+        .notification-title {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .notification-list {
+            margin-top: 20px;
+        }
+
+        .notification-list a {
+            text-decoration: none;
+            color: #007bff;
+            font-size: 1.1em;
+        }
+
+        .notification-list a:hover {
+            text-decoration: underline;
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #333;
+            text-align: left;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 1.2em;
+            color: #aaa;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #d9534f;
+        }
     </style>
 </head>
 <body>
@@ -99,7 +167,6 @@
         <!-- Navigācija -->
         <nav>
             <a href="{{ route('consultations.create') }}">Pievienot konsultāciju</a>
-            <!-- Poga "Konsultāciju saraksts", kas novirza uz index -->
             <a href="{{ route('consultations.index') }}">Konsultāciju saraksts</a>
         </nav>
 
@@ -108,6 +175,30 @@
             @csrf
             <input type="submit" value="Izrakstīties">
         </form>
+
+        <!-- Paziņojumi (Notifications) Section -->
+        <div class="section-title">Paziņojumi</div>
+
+        <!-- Saraksts ar anulētām konsultācijām -->
+        <div class="notification-list">
+            @foreach(auth()->user()->notifications as $notification)
+            <div class="notification">
+                <!-- dzešanas forma -->
+                <form action="{{ route('notifications.delete', $notification->id) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="close-btn">&times;</button>
+                </form>
+                
+                
+                <div class="notification-title">
+                    <strong>{{ $notification->data['student_name'] ?? 'Nezināms students' }}</strong>
+                </div>
+                <small>Konsultācija: {{ \Carbon\Carbon::parse($notification->data['consultation_date'])->format('d.m.Y H:i') }}</small>
+                <small>Iemesls: {{ $notification->data['reason'] ?? 'Nav norādīts iemesls' }}</small>
+            </div>
+            @endforeach
+        </div>
     </div>
 </body>
 </html>
