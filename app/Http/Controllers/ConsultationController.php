@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Consultation;
 use App\Models\MyConsultation; 
+use App\Notifications\ConsultationUpdatedNotification;
+
 
 class ConsultationController extends Controller
 {
@@ -99,6 +101,10 @@ class ConsultationController extends Controller
         $consultation->is_active = true;
         $consultation->save();
 
+        foreach ($consultation->users as $student) {
+            $student->notify(new ConsultationUpdatedNotification($consultation, 'updated'));
+        }
+
         return redirect()->route('consultations.index')->with('success', 'Konsultācija veiksmīgi atjaunināta!');
     }
 
@@ -118,6 +124,11 @@ class ConsultationController extends Controller
         }
 
         $consultation->delete();
+        
+        foreach ($consultation->users as $student) {
+            $student->notify(new ConsultationUpdatedNotification($consultation, 'deleted'));
+        }
+        
 
         return redirect('/consultations')->with('success', 'Konsultācija veiksmīgi dzēsta!');
     }

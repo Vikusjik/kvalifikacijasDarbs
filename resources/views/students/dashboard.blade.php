@@ -85,6 +85,40 @@
         .logout-form input:hover {
             background-color: #c9302c;
         }
+
+        .notifications {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .notification {
+            background-color: #fff8e1;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            font-size: 15px;
+        }
+
+        .clear-btn {
+            margin-top: 10px;
+            text-align: right;
+        }
+
+        .clear-btn form button {
+            background-color: #f0ad4e;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .clear-btn form button:hover {
+            background-color: #ec971f;
+        }
     </style>
 </head>
 <body>
@@ -97,8 +131,28 @@
         <!-- Navigācija -->
         <nav>
             <a href="{{ route('consultations.index') }}">Konsultāciju saraksts</a>
-            <a href="{{ route('myConsultation.index') }}">Manas konsultācijas</a>
+            <a href="{{ route('myConsultation.index') }}">Pieteiktās konsultācijas</a>
         </nav>
+
+        <!-- Notifications -->
+        <div class="notifications">
+            <h3>Jūsu paziņojumi</h3>
+
+            <div class="clear-btn">
+                <form method="POST" action="{{ route('notifications.clear') }}">
+                    @csrf
+                    <button type="submit">Notīrīt paziņojumus</button>
+                </form>
+            </div>
+
+            @forelse($notifications as $notification)
+                <div class="notification">
+                    {{ $notification->data['message'] }}
+                </div>
+            @empty
+                <p>Nav jaunu paziņojumu.</p>
+            @endforelse
+        </div>
 
         <!-- Logout -->
         <form method="POST" action="{{ route('logout') }}" class="logout-form">

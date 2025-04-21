@@ -22,7 +22,7 @@ class ConsultationCancelled extends Notification
 
     public function via($notifiable)
     {
-        return ['database']; // Внутреннее уведомление
+        return ['database']; 
     }
 
     public function toDatabase($notifiable)

@@ -53,3 +53,6 @@ Route::delete('/notifications/{notification}', function ($notificationId) {
     
     return redirect()->back(); 
 })->name('notifications.delete');
+
+Route::post('/notifications/clear', [DashboardController::class, 'clearNotifications'])->name('notifications.clear');
+
