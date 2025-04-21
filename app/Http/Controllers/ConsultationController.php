@@ -3,21 +3,32 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Consultation;
-use App\Models\MyConsultation; 
+use App\Models\MyConsultation;
 use App\Notifications\ConsultationUpdatedNotification;
-
+use Illuminate\Support\Facades\Notification;
 
 class ConsultationController extends Controller
 {
+
+    // Metode, lai notīrītu visus paziņojumus
+    public function clearAllNotifications()
+    {
+        auth()->user()->notifications()->delete();
+    
+        return redirect()->route('home')->with('success', 'Paziņojumi notīrīti!');
+    }
+
     // Konsultāciju saraksts
     public function index()
     {
+        // Filtrējam aktīvās konsultācijas, kas nav pierakstītas šim lietotājam
         $consultations = Consultation::where('is_active', 1) // Tikai aktīvas konsultācijas
         ->whereDoesntHave('users', function ($query) {
-            $query->where('user_id', auth()->id());  // Izmetam konsultācijas pie kuiram jau esot
+            $query->where('user_id', auth()->id());  // Izmetam konsultācijas, pie kurām jau ir šis lietotājs
         })
         ->get();
 
+        // Konsultāciju saraksts
         $consultations = Consultation::all();  
         return view('consultations.index', compact('consultations'));  
     }
@@ -55,7 +66,7 @@ class ConsultationController extends Controller
     {
         if ($consultation->created_by !== auth()->id()) {
             return redirect('/consultations')->with('error', 'Jums nav tiesību skatīties studentu sarakstu.');
-           }
+        }
     
         // Useru ielāde, saistītus ar konsultāciju
         $consultation->load('users'); 
@@ -68,14 +79,14 @@ class ConsultationController extends Controller
     // Konsultācijas rediģēšana
     public function edit($id)
     {
-        // Parbaudam vai user ir skolotājs
+        // Pārbaudām, vai lietotājs ir skolotājs
         if (auth()->user()->usertype !== 'admin') {
          return redirect('/consultations')->with('error', 'Nav tiesību rediģēt šo konsultāciju.');
         }
 
         $consultation = Consultation::findOrFail($id);
 
-        //Parbaudam to, vai tekošais user ir konsultācijas izveidotajs 
+        // Pārbaudām, vai lietotājs ir konsultācijas izveidotājs
         if ($consultation->created_by !== auth()->id()) {
          return redirect('/consultations')->with('error', 'Jums nav tiesību rediģēt šo konsultāciju.');
         }
@@ -101,6 +112,7 @@ class ConsultationController extends Controller
         $consultation->is_active = true;
         $consultation->save();
 
+        // Sūta paziņojumus visiem studentiem, kuri ir pierakstījušies
         foreach ($consultation->users as $student) {
             $student->notify(new ConsultationUpdatedNotification($consultation, 'updated'));
         }
@@ -108,8 +120,8 @@ class ConsultationController extends Controller
         return redirect()->route('consultations.index')->with('success', 'Konsultācija veiksmīgi atjaunināta!');
     }
 
-        // Konsultācijas dzēšana
-        public function destroy($id)
+    // Konsultācijas dzēšana
+    public function destroy($id)
     {
         // Pārbaudām, vai lietotājs ir skolotājs
         if (auth()->user()->usertype !== 'admin') {
@@ -118,46 +130,45 @@ class ConsultationController extends Controller
 
         $consultation = Consultation::findOrFail($id);
 
-        //Parbaudam to, vai tekošais user ir konsultācijas izveidotajs 
+        // Pārbaudām, vai lietotājs ir konsultācijas izveidotājs
         if ($consultation->created_by !== auth()->id()) {
             return redirect('/consultations')->with('error', 'Jums nav tiesību dzēst šo konsultāciju.');
         }
 
         $consultation->delete();
         
+        // Sūta paziņojumus visiem studentiem, kuri bija pierakstījušies
         foreach ($consultation->users as $student) {
             $student->notify(new ConsultationUpdatedNotification($consultation, 'deleted'));
         }
-        
 
         return redirect('/consultations')->with('success', 'Konsultācija veiksmīgi dzēsta!');
     }
-   
 
+    // Pieteikšanās uz konsultāciju
     public function registerAndAssign(Request $request, Consultation $consultation)
-{
-    $request->validate([
-        'topic' => 'required|string|max:255',
-    ]);
+    {
+        $request->validate([
+            'topic' => 'required|string|max:255',
+        ]);
 
-    if ($consultation->is_active == 1) {
-        if ($consultation->users()->where('user_id', auth()->id())->exists()) {
-            return back()->with('error', 'Jūs jau esat pierakstīts uz šo konsultāciju!');
+        if ($consultation->is_active == 1) {
+            // Pārbaudām, vai lietotājs jau ir pierakstījies
+            if ($consultation->users()->where('user_id', auth()->id())->exists()) {
+                return back()->with('error', 'Jūs jau esat pierakstījies uz šo konsultāciju!');
+            }
+
+            // Limita pārbaude (maksimālais studentu skaits 10)
+            if ($consultation->users()->count() >= 10) {
+                return back()->with('error', 'Šī konsultācija jau ir pilna (maks. 10 studenti).');
+            }
+
+            // Pievienojam lietotāju konsultācijai
+            $consultation->users()->attach(auth()->id(), ['topic' => $request->topic]);
+
+            return redirect()->route('myConsultation.index')->with('success', 'Jūs esat veiksmīgi pieteicies konsultācijai!');
         }
 
-        // Limita parbaude
-        if ($consultation->users()->count() >= 10) {
-            return back()->with('error', 'Šī konsultācija jau ir pilna (maks. 10 studenti).');
-        }
-
-        $consultation->users()->attach(auth()->id(), ['topic' => $request->topic]);
-
-        return redirect()->route('myConsultation.index')->with('success', 'Jūs esat veiksmīgi pieteicies konsultācijai!');
+        return back()->with('error', 'Konsultācija bija aizvērta vai pabeigta!');
     }
-
-    return back()->with('error', 'Konsultācija bija aizvērta vai pabeigta!');
-}
-
-
-
 }

@@ -67,7 +67,7 @@ public function cancel(Request $request, $consultationId)
         // Tekoša ieraksta dzēšana 
         $consultation->users()->detach(auth()->id());
 
-        // Uzer pievienošana pie jaunam konsultācijam
+        // User pievienošana pie jaunam konsultācijam
         $newConsultation->users()->attach(auth()->id(), ['topic' => $request->topic]);
 
         return redirect()->route('myConsultation.index')->with('success', 'Konsultācija veiksmīgi atjaunināta.');

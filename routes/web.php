@@ -44,15 +44,7 @@ Route::resource('consultations', ConsultationController::class);
 Route::get('/consultations/{id}/register', [StudentController::class, 'registerForm'])->name('consultations.register.form');
 Route::post('/consultations/{id}/register', [StudentController::class, 'registerSubmit'])->name('consultations.register.submit');
 
-Route::delete('/notifications/{notification}', function ($notificationId) {
-    // Atradam pec ID
-    $notification = Auth::user()->notifications()->findOrFail($notificationId);
-    
-    // dzešam paziņojumu
-    $notification->delete();
-    
-    return redirect()->back(); 
-})->name('notifications.delete');
 
+Route::post('/notifications/clear1', [ConsultationController::class, 'clearAllNotifications'])->name('notifications.clear1');
 Route::post('/notifications/clear', [DashboardController::class, 'clearNotifications'])->name('notifications.clear');
 

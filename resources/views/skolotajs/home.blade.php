@@ -24,7 +24,7 @@
 
         .container {
             max-width: 900px;
-            margin: 20px auto;
+            margin: 0 auto;
             padding: 20px;
             background-color: rgba(255, 255, 255, 0.9);
             border-radius: 15px;
@@ -32,137 +32,135 @@
             text-align: center;
         }
 
-        .logo-container {
+        .header {
+            text-align: center;
             margin-bottom: 20px;
-        }
-        .logo {
-            max-width: 120px;
-            height: auto;
         }
 
-        h1 {
-            font-size: 2em;
-            margin-bottom: 20px;
+        .header h1 {
+            font-size: 28px;
+            color: #007bff;
+            margin: 0;
         }
 
         nav {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
             margin-top: 20px;
         }
 
-        nav a, nav button {
+        nav a {
             text-decoration: none;
+            background-color: white;
             color: #333;
             padding: 10px 20px;
             border-radius: 5px;
             font-weight: bold;
             border: 1px solid #ddd;
             transition: all 0.3s ease-in-out;
-            background-color: white;
-            cursor: pointer;
         }
 
-        nav a:hover, nav button:hover {
+        nav a:hover {
             background-color: #007bff;
             color: white;
             border-color: #0056b3;
         }
 
         .logout-form {
-            margin-top: 30px;
+            margin-top: 20px;
         }
 
         .logout-form input {
             padding: 10px 20px;
             background-color: #d9534f;
             color: white;
-            text-decoration: none;
             border-radius: 5px;
             font-weight: bold;
             border: none;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s ease-in-out;
         }
 
         .logout-form input:hover {
             background-color: #c9302c;
         }
 
+        .notifications {
+            margin-top: 30px;
+            text-align: left;
+        }
+
         .notification {
-            background-color: #fff;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 15px;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-            text-align: left;
-            position: relative;
-        }
-
-        .notification strong {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .notification small {
-            display: block;
-            color: #555;
-        }
-
-        .notification-title {
-            font-size: 1.2em;
+            background-color: #fff8e1;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
             margin-bottom: 10px;
-            text-align: left;
+            border-radius: 5px;
+            font-size: 15px;
+        }
+
+        .clear-btn {
+            margin-top: 10px;
+            text-align: right;
+        }
+
+        .clear-btn form button {
+            background-color: #f0ad4e;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
             font-weight: bold;
-        }
-
-        .notification-list {
-            margin-top: 20px;
-        }
-
-        .notification-list a {
-            text-decoration: none;
-            color: #007bff;
-            font-size: 1.1em;
-        }
-
-        .notification-list a:hover {
-            text-decoration: underline;
-        }
-
-        .section-title {
-            font-size: 1.5em;
-            font-weight: bold;
-            margin-top: 20px;
-            color: #333;
-            text-align: left;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
             cursor: pointer;
-            font-size: 1.2em;
-            color: #aaa;
-            transition: color 0.3s;
+            transition: background-color 0.3s;
         }
 
-        .close-btn:hover {
-            color: #d9534f;
+        .clear-btn form button:hover {
+            background-color: #ec971f;
+        }
+
+        .no-notifications {
+            color: #333;
+            font-size: 15px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .delete-all-btn {
+            background-color: #f0ad4e;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 15px;
+        }
+
+        .delete-all-btn:hover {
+            background-color: #ec971f;
+        }
+
+        .delete-btn-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .delete-all-btn-container {
+            margin-top: 20px;
+            text-align: right;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Logotips -->
-        <div class="logo-container">
-            <img src="images/VT-logo.jpeg" alt="Ventspils Tehnikums Logo" class="logo">
+        <!-- Header -->
+        <div class="header">
+            <h1>Skolotāju lapa</h1>
         </div>
-
-        <!-- Skolotāju lapa -->
-        <h1>Skolotāju lapa</h1>
 
         <!-- Navigācija -->
         <nav>
@@ -170,34 +168,35 @@
             <a href="{{ route('consultations.index') }}">Konsultāciju saraksts</a>
         </nav>
 
-        <!-- Logout poga -->
+        <!-- Logout -->
         <form method="POST" action="{{ route('logout') }}" class="logout-form">
             @csrf
             <input type="submit" value="Izrakstīties">
         </form>
 
-        <!-- Paziņojumi (Notifications) Section -->
-        <div class="section-title">Paziņojumi</div>
-
-        <!-- Saraksts ar anulētām konsultācijām -->
-        <div class="notification-list">
-            @foreach(auth()->user()->notifications as $notification)
-            <div class="notification">
-                <!-- dzešanas forma -->
-                <form action="{{ route('notifications.delete', $notification->id) }}" method="POST">
+        <!-- Paziņojumi (Notifications) -->
+        <div class="notifications">
+            <div class="delete-btn-container">
+                <h3>Paziņojumi</h3>
+                <!-- Izdzēst visus paziņojumus -->
+                <form method="POST" action="{{ route('notifications.clear') }}" class="delete-all-btn-container">
                     @csrf
-                    @method('DELETE')
-                    <button type="submit" class="close-btn">&times;</button>
+                    <button type="submit" class="delete-all-btn">Notīrīt paziņojumus</button>
                 </form>
-                
-                
-                <div class="notification-title">
-                    <strong>{{ $notification->data['student_name'] ?? 'Nezināms students' }}</strong>
-                </div>
-                <small>Konsultācija: {{ \Carbon\Carbon::parse($notification->data['consultation_date'])->format('d.m.Y H:i') }}</small>
-                <small>Iemesls: {{ $notification->data['reason'] ?? 'Nav norādīts iemesls' }}</small>
             </div>
-            @endforeach
+
+            <!-- Parbauda pazinojumu pieejamibu -->
+            @forelse(auth()->user()->notifications as $notification)
+                <div class="notification">
+                    <div class="notification-title">
+                        <strong>{{ $notification->data['student_name'] ?? 'Nezināms students' }}</strong>
+                    </div>
+                    <small>Konsultācija: {{ \Carbon\Carbon::parse($notification->data['consultation_date'])->format('d.m.Y H:i') }}</small>
+                    <small>Iemesls: {{ $notification->data['reason'] ?? 'Nav norādīts iemesls' }}</small>
+                </div>
+            @empty
+                <div class="no-notifications">Nav jaunu paziņojumu.</div>
+            @endforelse
         </div>
     </div>
 </body>
