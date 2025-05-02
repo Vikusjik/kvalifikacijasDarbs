@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Ventspils Tehnikums 2 - Skolotāju lapa</title>
+    <title>Viktorijas Tehnikums - Skolotāju lapa</title>
     <style>
-        body {
+            body {
             font-family: Arial, sans-serif;
             background-color: #e6f2ff;
             background-image: url('images/VT-eka.png');
-            background-size: contain;
-            background-position: center;
+            background-size: 50%; 
+            background-position: top center;
             background-repeat: no-repeat;
             color: #333;
             margin: 0;
@@ -19,61 +19,54 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            justify-content: flex-start;
+            justify-content: flex-end;
         }
+
 
         .container {
             max-width: 900px;
-            margin: 0 auto;
+            margin: 0 auto 40px;
             padding: 20px;
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: rgba(255, 255, 255, 0.85);
             border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             text-align: center;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
         }
 
         .header h1 {
-            font-size: 28px;
-            color: #007bff;
-            margin: 0;
+            font-size: 26px;
+            color: #336699;
+            margin: 0 0 15px;
         }
 
         nav {
             display: flex;
             justify-content: center;
             gap: 15px;
-            margin-top: 20px;
+            margin-top: 10px;
         }
 
         nav a {
             text-decoration: none;
-            background-color: white;
-            color: #333;
+            background-color: #f2f2f2;
+            color: #444;
             padding: 10px 20px;
             border-radius: 5px;
             font-weight: bold;
-            border: 1px solid #ddd;
+            border: 1px solid #ccc;
             transition: all 0.3s ease-in-out;
         }
 
         nav a:hover {
-            background-color: #007bff;
+            background-color: #336699;
             color: white;
-            border-color: #0056b3;
-        }
-
-        .logout-form {
-            margin-top: 20px;
+            border-color: #2a4d73;
         }
 
         .logout-form input {
+            margin-top: 20px;
             padding: 10px 20px;
-            background-color: #d9534f;
+            background-color: #cc6666;
             color: white;
             border-radius: 5px;
             font-weight: bold;
@@ -83,7 +76,7 @@
         }
 
         .logout-form input:hover {
-            background-color: #c9302c;
+            background-color: #b94a48;
         }
 
         .notifications {
@@ -92,43 +85,22 @@
         }
 
         .notification {
-            background-color: #fff8e1;
-            border-left: 5px solid #ffc107;
+            background-color: #f8f9fa;
+            border-left: 5px solid #90c2e7;
             padding: 15px;
             margin-bottom: 10px;
             border-radius: 5px;
             font-size: 15px;
         }
 
-        .clear-btn {
-            margin-top: 10px;
+        .clear-btn,
+        .delete-all-btn-container {
             text-align: right;
-        }
-
-        .clear-btn form button {
-            background-color: #f0ad4e;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .clear-btn form button:hover {
-            background-color: #ec971f;
-        }
-
-        .no-notifications {
-            color: #333;
-            font-size: 15px;
-            margin-top: 20px;
-            text-align: center;
+            margin-top: 10px;
         }
 
         .delete-all-btn {
-            background-color: #f0ad4e;
+            background-color: #6c91c2;
             color: white;
             border: none;
             padding: 8px 16px;
@@ -136,11 +108,17 @@
             font-weight: bold;
             cursor: pointer;
             transition: background-color 0.3s;
-            font-size: 15px;
         }
 
         .delete-all-btn:hover {
-            background-color: #ec971f;
+            background-color: #5877a3;
+        }
+
+        .no-notifications {
+            color: #555;
+            font-size: 15px;
+            margin-top: 20px;
+            text-align: center;
         }
 
         .delete-btn-container {
@@ -148,50 +126,39 @@
             justify-content: space-between;
             align-items: center;
         }
-
-        .delete-all-btn-container {
-            margin-top: 20px;
-            text-align: right;
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <div class="header">
             <h1>Skolotāju lapa</h1>
         </div>
 
-        <!-- Navigācija -->
         <nav>
             <a href="{{ route('consultations.create') }}">Pievienot konsultāciju</a>
             <a href="{{ route('consultations.index') }}">Konsultāciju saraksts</a>
         </nav>
 
-        <!-- Logout -->
         <form method="POST" action="{{ route('logout') }}" class="logout-form">
             @csrf
             <input type="submit" value="Izrakstīties">
         </form>
 
-        <!-- Paziņojumi (Notifications) -->
         <div class="notifications">
             <div class="delete-btn-container">
                 <h3>Paziņojumi</h3>
-                <!-- Izdzēst visus paziņojumus -->
                 <form method="POST" action="{{ route('notifications.clear') }}" class="delete-all-btn-container">
                     @csrf
                     <button type="submit" class="delete-all-btn">Notīrīt paziņojumus</button>
                 </form>
             </div>
 
-            <!-- Parbauda pazinojumu pieejamibu -->
             @forelse(auth()->user()->notifications as $notification)
                 <div class="notification">
                     <div class="notification-title">
                         <strong>{{ $notification->data['student_name'] ?? 'Nezināms students' }}</strong>
                     </div>
-                    <small>Konsultācija: {{ \Carbon\Carbon::parse($notification->data['consultation_date'])->format('d.m.Y H:i') }}</small>
+                    <small>Konsultācija: {{ \Carbon\Carbon::parse($notification->data['consultation_date'])->format('d.m.Y H:i') }}</small><br>
                     <small>Iemesls: {{ $notification->data['reason'] ?? 'Nav norādīts iemesls' }}</small>
                 </div>
             @empty

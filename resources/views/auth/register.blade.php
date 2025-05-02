@@ -39,7 +39,7 @@
 
         .btn {
             display: inline-block;
-            background-color: #007bff;
+            background-color: #4a90e2;
             color: white;
             padding: 12px 25px;
             border: none;
@@ -50,7 +50,7 @@
         }
 
         .btn:hover {
-            background-color: #0056b3;
+            background-color: #4a90e2;
         }
 
         .form-control {

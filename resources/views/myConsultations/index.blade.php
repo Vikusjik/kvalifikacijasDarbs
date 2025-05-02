@@ -6,148 +6,203 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Manas konsultācijas</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 0;
-        }
+       body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f8fb;
+    margin: 0;
+    padding: 0;
+}
 
         .header {
-            background-color: #007bff;
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+    background-color: #4a90e2;
+    color: white;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 
         .header img {
-            height: 80px;
-            width: auto;
-        }
+    height: 90px;
+    width: auto;
+}
 
-        .header h1 {
+    
+.header h1 {
             margin: 0;
-            font-size: 24px;
+            font-size: 22px;
+            text-align: center; 
+            flex-grow: 1; 
         }
 
         .container {
-            max-width: 900px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
 
         h1 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #007bff;
-        }
+    text-align: center;
+    margin-bottom: 20px;
+    color: #356b8c;
+}
+
+        .alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-align: center;
+}
+
+        .alert-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+        .alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+        .back-btn {
+    background-color: #6c757d;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    text-decoration: none;
+    font-weight: 600;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    transition: background-color 0.3s ease;
+}
+
+        .back-btn:hover {
+    background-color: #5a6268;
+}
 
         .actions {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-        }
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+}
 
         .actions a {
-            text-decoration: none;
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
+    text-decoration: none;
+    background-color: #4a90e2;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
 
         .actions a:hover {
-            background-color: #0056b3;
-        }
+    background-color: #357ab8;
+}
 
         table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 25px;
+}
 
         table th, table td {
-            border: 1px solid #ddd;
-            padding: 12px 15px;
-            text-align: left;
-        }
+    border: 1px solid #ddd;
+    padding: 12px 15px;
+    text-align: left;
+}
 
         table th {
-            background-color: #007bff;
-            color: white;
-        }
+    background-color: #4a90e2;
+    color: white;
+}
 
         table tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
+    background-color: #f9f9f9;
+}
 
         table tr:hover {
-            background-color: #f1f1f1;
-        }
+    background-color: #eef3f9;
+}
 
-        .action-buttons a, .action-buttons button {
-            text-decoration: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            font-size: 14px;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
+        .action-buttons {
+    margin-top: 10px;
+}
+
+        .action-buttons button,
+        .action-buttons a {
+    text-decoration: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
 
         .action-buttons a {
-            background-color: #007bff;
-        }
+    background-color: #4a90e2;
+}
 
         .action-buttons a:hover {
-            background-color: #0056b3;
-        }
+    background-color: #357ab8;
+}
 
         .action-buttons button {
-            background-color: #d9534f;
-        }
+    background-color: #d9534f;
+}
 
         .action-buttons button:hover {
-            background-color: #c9302c;
-        }
+    background-color: #c9302c;
+}
 
-        /* Atpakaļ uz sākumu poga - novieto to labajā pusē */
-        .back-btn {
-            text-decoration: none;
-            background-color: #6c757d;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: background-color 0.3s;
-            position: absolute;  /* Izvieto absolūti */
-            right: 20px;  /* Pozicionē labajā pusē */
-            top: 20px;    /* Ievieto poga nedaudz no augšas */
-        }
+        .reason-form, .edit-form {
+    margin-top: 10px;
+    display: none;
+}
 
-        .reason-form {
-            display: none;
-        }
+        .reason-form textarea,
+        .edit-form input,
+        .edit-form select {
+    width: 100%;
+    padding: 8px;
+    margin: 8px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
 
-        .edit-form {
-            display: none;
-        }
-        
+        .reason-form button,
+        .edit-form button {
+    background-color: #4a90e2;
+    color: white;
+    font-weight: bold;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+        .reason-form button:hover,
+        .edit-form button:hover {
+    background-color: #357ab8;
+}
+
     </style>
 </head>
 <body>
     
     <div class="header">
         <img src="{{ asset('images/VT-logo.jpeg') }}" alt="Ventspils Tehnikums Logo">
-        <h1>Konsultāciju saraksts</h1>
+       <h1>Pieteiktās konsultācijas</h1>
     </div>
 
     <div class="container">
@@ -166,7 +221,7 @@
 
         <!-- Poga "Atpakaļ uz sākumu" labajā pusē -->
         <a href="{{ route('home') }}" class="back-btn">Atpakaļ uz sākumu</a>
-        <h1>Manas konsultācijas</h1>
+      
         
         @if($myConsultations->isEmpty())
             <p>Jūs neesat pieteicies nevienai konsultācijai.</p>

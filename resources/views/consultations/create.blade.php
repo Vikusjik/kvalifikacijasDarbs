@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Pievienot konsultāciju</title>
     <style>
-         body {
+        body {
             font-family: Arial, sans-serif;
-            background-color: #e6f2ff;
+            background-color: #f4f8fb;
             background-image: url('{{ asset('images/VT-eka.png') }}');
-            background-size: contain;
-            background-position: center;
+            background-size: 40%;
+            background-position: top center;
             background-repeat: no-repeat;
             color: #333;
             margin: 0;
@@ -23,17 +22,19 @@
         }
 
         .container {
-            max-width: 900px;
+            max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             text-align: center;
+            margin-bottom: 40px;
         }
 
         h1 {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            color: #356b8c;
         }
 
         form {
@@ -46,74 +47,69 @@
             font-weight: bold;
             display: block;
             margin-bottom: 10px;
+            color: #444;
         }
 
         input[type="datetime-local"] {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 12px;
+            margin-bottom: 25px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
             box-sizing: border-box;
         }
 
-        button {
-            padding: 10px 20px;
-            background-color: #007bff;
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .submit-btn {
+            padding: 14px 28px;
+            background-color: #4a90e2;
             color: white;
-            text-decoration: none;
-            border-radius: 5px;
+            border-radius: 8px;
+            font-size: 18px;
             font-weight: bold;
             border: none;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s ease;
         }
 
-        button:hover {
-            background-color: #0056b3;
+        .submit-btn:hover {
+            background-color: #357ab8;
         }
+
         .back-btn {
-            background-color: #28a745;
-            padding: 12px 25px;
-            color: white;
-            border-radius: 30px;
-            text-transform: uppercase;
+            background-color: #d3e0ea;
+            color: #333;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            text-decoration: none;
             font-weight: 600;
-            border: 2px solid transparent;
-            transition: all 0.3s ease-in-out;
-            font-size: 16px;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
+            transition: background-color 0.3s ease;
         }
 
         .back-btn:hover {
-            background-color: #218838;
-            border-color: #1e7e34;
-            transform: translateY(-3px);
-        }
-
-        .back-btn i {
-            font-size: 18px;
+            background-color: #c0d3df;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Virsraksts -->
         <h1>Pievienot konsultāciju</h1>
-
-        <!-- Forma -->
         <form action="{{ route('consultations.store') }}" method="POST">
             @csrf
             <label for="date_time">Konsultācijas datums un laiks:</label>
             <input type="datetime-local" id="date_time" name="date_time" required>
 
             <div class="button-container">
-            <button type="submit">Saglabāt</button>
-            <a href="{{ route('consultations.index') }}" class="back-btn">
-                <i class="fa fa-arrow-left"></i> Atpakaļ uz sarakstu
-            </a>
+                <button type="submit" class="submit-btn">Saglabāt</button>
+                <a href="{{ route('consultations.index') }}" class="back-btn">Atpakaļ uz sarakstu</a>
             </div>
         </form>
     </div>

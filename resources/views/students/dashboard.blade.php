@@ -10,8 +10,8 @@
             font-family: Arial, sans-serif;
             background-color: #e6f2ff;
             background-image: url('images/VT-eka.png');
-            background-size: contain;
-            background-position: center;
+            background-size: 50%;
+            background-position: top center;
             background-repeat: no-repeat;
             color: #333;
             margin: 0;
@@ -24,11 +24,11 @@
 
         .container {
             max-width: 900px;
-            margin: 0 auto;
+            margin: 0 auto 40px;
             padding: 20px;
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: rgba(255, 255, 255, 0.85);
             border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             text-align: center;
         }
 
@@ -38,42 +38,39 @@
         }
 
         .header h1 {
-            font-size: 28px;
-            color: #007bff;
-            margin: 0;
+            font-size: 26px;
+            color: #336699;
+            margin: 0 0 15px;
         }
 
         nav {
             display: flex;
             justify-content: center;
             gap: 15px;
-            margin-top: 20px;
+            margin-top: 10px;
         }
 
         nav a {
             text-decoration: none;
-            background-color: white;
-            color: #333;
+            background-color: #f2f2f2;
+            color: #444;
             padding: 10px 20px;
             border-radius: 5px;
             font-weight: bold;
-            border: 1px solid #ddd;
+            border: 1px solid #ccc;
             transition: all 0.3s ease-in-out;
         }
 
         nav a:hover {
-            background-color: #007bff;
+            background-color: #336699;
             color: white;
-            border-color: #0056b3;
-        }
-
-        .logout-form {
-            margin-top: 20px;
+            border-color: #2a4d73;
         }
 
         .logout-form input {
+            margin-top: 20px;
             padding: 10px 20px;
-            background-color: #d9534f;
+            background-color: #cc6666;
             color: white;
             border-radius: 5px;
             font-weight: bold;
@@ -83,7 +80,7 @@
         }
 
         .logout-form input:hover {
-            background-color: #c9302c;
+            background-color: #b94a48;
         }
 
         .notifications {
@@ -92,21 +89,22 @@
         }
 
         .notification {
-            background-color: #fff8e1;
-            border-left: 5px solid #ffc107;
+            background-color: #f8f9fa;
+            border-left: 5px solid #90c2e7;
             padding: 15px;
             margin-bottom: 10px;
             border-radius: 5px;
             font-size: 15px;
         }
 
-        .clear-btn {
-            margin-top: 10px;
+        .clear-btn,
+        .delete-all-btn-container {
             text-align: right;
+            margin-top: 10px;
         }
 
-        .clear-btn form button {
-            background-color: #f0ad4e;
+        .delete-all-btn {
+            background-color: #6c91c2;
             color: white;
             border: none;
             padding: 8px 16px;
@@ -116,8 +114,15 @@
             transition: background-color 0.3s;
         }
 
-        .clear-btn form button:hover {
-            background-color: #ec971f;
+        .delete-all-btn:hover {
+            background-color: #5877a3;
+        }
+
+        .no-notifications {
+            color: #555;
+            font-size: 15px;
+            margin-top: 20px;
+            text-align: center;
         }
     </style>
 </head>
@@ -136,12 +141,11 @@
 
         <!-- Notifications -->
         <div class="notifications">
-            <h3>Jūsu paziņojumi</h3>
-
-            <div class="clear-btn">
-                <form method="POST" action="{{ route('notifications.clear') }}">
+            <div class="delete-btn-container">
+                <h3>Jūsu paziņojumi</h3>
+                <form method="POST" action="{{ route('notifications.clear') }}" class="delete-all-btn-container">
                     @csrf
-                    <button type="submit">Notīrīt paziņojumus</button>
+                    <button type="submit" class="delete-all-btn">Notīrīt paziņojumus</button>
                 </form>
             </div>
 
@@ -150,7 +154,7 @@
                     {{ $notification->data['message'] }}
                 </div>
             @empty
-                <p>Nav jaunu paziņojumu.</p>
+                <div class="no-notifications">Nav jaunu paziņojumu.</div>
             @endforelse
         </div>
 

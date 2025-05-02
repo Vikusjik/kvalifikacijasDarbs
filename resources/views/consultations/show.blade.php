@@ -1,77 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="lv">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Konsultācijas informācija</title>
-</head>
-<body>
     <style>
-    body {
+        body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
+            background-color: #f4f8fb;
             margin: 0;
             padding: 0;
         }
 
         .header {
-            background-color: #007bff;
+            background-color: #4a90e2;
             color: white;
-            padding: 15px 20px;
+            padding: 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
         .header img {
-            height: 80px;
-            width: auto;
+            height: 90px;
         }
 
         .header h1 {
             margin: 0;
-            font-size: 24px;
+            font-size: 22px;
         }
 
         .container {
             max-width: 900px;
-            margin: 20px auto;
-            padding: 20px;
+            margin: 30px auto;
+            padding: 30px;
             background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        h1 {
+        h1, h2 {
             text-align: center;
+            color: #356b8c;
             margin-bottom: 20px;
-            color: #007bff;
         }
 
-        .actions {
+        .alert {
+            padding: 15px;
             margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
         }
 
-        .actions a {
-            text-decoration: none;
-            background-color: #007bff;
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .back-btn {
+            background-color: #6c757d;
             color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            text-decoration: none;
+            font-weight: 600;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            transition: background-color 0.3s ease;
         }
 
-        .actions a:hover {
-            background-color: #0056b3;
+        .back-btn:hover {
+            background-color: #5a6268;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 25px;
         }
 
         table th, table td {
@@ -81,7 +94,7 @@
         }
 
         table th {
-            background-color: #007bff;
+            background-color: #4a90e2;
             color: white;
         }
 
@@ -90,77 +103,40 @@
         }
 
         table tr:hover {
-            background-color: #f1f1f1;
+            background-color: #eef3f9;
         }
 
-        .action-buttons a, .action-buttons button {
-            text-decoration: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            font-size: 14px;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s;
+        .action-buttons {
+            text-align: center;
+            margin-top: 30px;
         }
 
         .action-buttons a {
-            background-color: #007bff;
+            text-decoration: none;
+            padding: 12px 22px;
+            border-radius: 8px;
+            font-size: 16px;
+            color: white;
+            background-color: #4a90e2;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
         }
 
         .action-buttons a:hover {
-            background-color: #0056b3;
-        }
-
-        .action-buttons button {
-            background-color: #d9534f;
-        }
-
-        .action-buttons button:hover {
-            background-color: #c9302c;
-        }
-
-        /* Atpakaļ uz sākumu poga - novieto to labajā pusē */
-        .back-btn {
-            text-decoration: none;
-            background-color: #6c757d;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: background-color 0.3s;
-            position: absolute;  /* Izvieto absolūti */
-            right: 20px;  /* Pozicionē labajā pusē */
-            top: 20px;    /* Ievieto poga nedaudz no augšas */
-        }
-
-        .back-btn:hover {
-            background-color: #5a6268;
-        }
-
-        /* Hide the form by default */
-        .topic-form {
-            display: none;
-            margin-top: 20px;
-        }
-
-        .topic-form input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            background-color: #357ab8;
         }
     </style>
+</head>
+<body>
 
-        
     <div class="header">
         <img src="{{ asset('images/VT-logo.jpeg') }}" alt="Ventspils Tehnikums Logo">
-        <h1>Konsultāciju saraksts</h1>
+        
     </div>
-    
+
+    <a href="{{ route('home') }}" class="back-btn">Atpakaļ uz sākumu</a>
+
     <div class="container">
-        <!-- Parādīt sesijas ziņas -->
         @if (session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
@@ -173,34 +149,34 @@
             </div>
         @endif
 
-        <!-- Poga "Atpakaļ uz sākumu" labajā pusē -->
-        <a href="{{ route('home') }}" class="back-btn">Atpakaļ uz sākumu</a>
-    <h1>Konsultācija: {{ $consultation->date_time->format('d.m.Y H:i') }}</h1>
+        <h1>Konsultācija: {{ $consultation->date_time->format('d.m.Y H:i') }}</h1>
+        <h2>Pieslēgtie studenti un tēmas</h2>
 
-    <h2>Pieslēgtie studenti un tēmas</h2>
-
-    @if ($consultation->users->isEmpty())
-        <p>Nav pieslēgto studentu.</p>
-    @else
-        <table border="1" cellpadding="10">
-            <thead>
-                <tr>
-                    <th>Students</th>
-                    <th>Tēma</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($consultation->users as $user)
+        @if ($consultation->users->isEmpty())
+            <p style="text-align: center;">Nav pieslēgto studentu.</p>
+        @else
+            <table>
+                <thead>
                     <tr>
-                        <td>{{ $user->name }}</td>
-                        <td>{{ $user->pivot->topic }}</td>
+                        <th>Students</th>
+                        <th>Tēma</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
-    @endif
-    <div class= "action-buttons">
-    <a href="{{ route('consultations.index') }}">Atpakaļ uz konsultācijām</a>
-</div>
+                </thead>
+                <tbody>
+                    @foreach ($consultation->users as $user)
+                        <tr>
+                            <td>{{ $user->name }}</td>
+                            <td>{{ $user->pivot->topic }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @endif
+
+        <div class="action-buttons">
+            <a href="{{ route('consultations.index') }}">Atpakaļ uz konsultācijām</a>
+        </div>
+    </div>
+
 </body>
 </html>

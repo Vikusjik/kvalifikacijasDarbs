@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="lv">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,69 +8,87 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
+            background-color: #f4f8fb;
             margin: 0;
             padding: 0;
         }
 
         .header {
-            background-color: #007bff;
+            background-color: #4a90e2;
             color: white;
-            padding: 15px 20px;
+            padding: 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
         .header img {
-            height: 80px;
+            height: 90px;
             width: auto;
         }
 
         .header h1 {
             margin: 0;
-            font-size: 24px;
+            font-size: 22px;
+            text-align: center; 
+            flex-grow: 1; 
         }
 
         .container {
             max-width: 900px;
-            margin: 20px auto;
-            padding: 20px;
+            margin: 30px auto;
+            padding: 30px;
             background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
             text-align: center;
+            color: #356b8c;
             margin-bottom: 20px;
-            color: #007bff;
         }
 
-        .actions {
+        .alert {
+            padding: 15px;
             margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
         }
 
-        .actions a {
-            text-decoration: none;
-            background-color: #007bff;
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .back-btn {
+            background-color: #6c757d;
             color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            text-decoration: none;
+            font-weight: 600;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            transition: background-color 0.3s ease;
         }
 
-        .actions a:hover {
-            background-color: #0056b3;
+        .back-btn:hover {
+            background-color: #5a6268;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 25px;
         }
 
         table th, table td {
@@ -80,7 +98,7 @@
         }
 
         table th {
-            background-color: #007bff;
+            background-color: #4a90e2;
             color: white;
         }
 
@@ -89,55 +107,29 @@
         }
 
         table tr:hover {
-            background-color: #f1f1f1;
+            background-color: #eef3f9;
         }
 
-        .action-buttons a, .action-buttons button {
-            text-decoration: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            font-size: 14px;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s;
+        .action-buttons {
+            text-align: center;
+            margin-top: 30px;
         }
 
         .action-buttons a {
-            background-color: #007bff;
+            text-decoration: none;
+            padding: 12px 22px;
+            border-radius: 8px;
+            font-size: 16px;
+            color: white;
+            background-color: #4a90e2;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
         }
 
         .action-buttons a:hover {
-            background-color: #0056b3;
+            background-color: #357ab8;
         }
 
-        .action-buttons button {
-            background-color: #d9534f;
-        }
-
-        .action-buttons button:hover {
-            background-color: #c9302c;
-        }
-
-        /* Atpakaļ uz sākumu poga - novieto to labajā pusē */
-        .back-btn {
-            text-decoration: none;
-            background-color: #6c757d;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: background-color 0.3s;
-            position: absolute;  /* Izvieto absolūti */
-            right: 20px;  /* Pozicionē labajā pusē */
-            top: 20px;    /* Ievieto poga nedaudz no augšas */
-        }
-
-        .back-btn:hover {
-            background-color: #5a6268;
-        }
-
-        /* Hide the form by default */
         .topic-form {
             display: none;
             margin-top: 20px;
@@ -150,13 +142,32 @@
             border: 1px solid #ddd;
             border-radius: 5px;
         }
+
+        .action-buttons button {
+            background-color: #d9534f;
+            padding: 8px 15px;
+            border-radius: 5px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .action-buttons button:hover {
+            background-color: #c9302c;
+        }
+
     </style>
 </head>
 <body>
+
     <div class="header">
         <img src="{{ asset('images/VT-logo.jpeg') }}" alt="Ventspils Tehnikums Logo">
         <h1>Konsultāciju saraksts</h1>
     </div>
+
+    <a href="{{ route('home') }}" class="back-btn">Atpakaļ uz sākumu</a>
 
     <div class="container">
         <!-- Parādīt sesijas ziņas -->
@@ -172,9 +183,6 @@
             </div>
         @endif
 
-        <!-- Poga "Atpakaļ uz sākumu" labajā pusē -->
-        <a href="{{ route('home') }}" class="back-btn">Atpakaļ uz sākumu</a>
-
         <table>
             <thead>
                 <tr>
@@ -186,7 +194,7 @@
             <tbody>
                 @foreach ($consultations as $consultation)
                     <tr>
-                        <td>{{ $consultation->creator->name ?? 'Nezināms' }}</td> <!-- Parādam skolotāja vārdu un uzvārdu -->
+                        <td>{{ $consultation->creator->name ?? 'Nezināms' }}</td>
                         <td>{{ $consultation->date_time->format('d.m.Y H:i') }}</td>
                         <td class="action-buttons">
                             @if(Auth::user()->usertype === 'admin')
@@ -201,7 +209,6 @@
                                 <a href="{{ route('consultations.show', $consultation->id) }}">Pieteiktie skolēni</a>
                             @else
                                 @if(!$consultation->users->contains('id', auth()->id()))
-                                    <!-- Button to show form -->
                                     <button onclick="toggleForm({{ $consultation->id }})">Pieteikties</button>
                                     <form method="POST" action="{{ route('consultations.register.submit', $consultation->id) }}" id="form-{{ $consultation->id }}" class="topic-form">
                                         @csrf
@@ -220,11 +227,11 @@
     </div>
 
     <script>
-        // Function to toggle the visibility of the form
         function toggleForm(consultationId) {
             var form = document.getElementById('form-' + consultationId);
             form.style.display = form.style.display === 'block' ? 'none' : 'block';
         }
     </script>
+
 </body>
 </html>
