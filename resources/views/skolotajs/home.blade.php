@@ -147,7 +147,7 @@
         <div class="notifications">
             <div class="delete-btn-container">
                 <h3>Paziņojumi</h3>
-                <form method="POST" action="{{ route('notifications.clear') }}" class="delete-all-btn-container">
+                <form method="POST" action="{{ route('notifications.clear1') }}" class="delete-all-btn-container">
                     @csrf
                     <button type="submit" class="delete-all-btn">Notīrīt paziņojumus</button>
                 </form>
@@ -168,3 +168,8 @@
     </div>
 </body>
 </html>
+
+
+
+
+
