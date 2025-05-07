@@ -64,26 +64,31 @@ class MyConsultationController extends Controller
 
 
     public function update(Request $request, Consultation $consultation)
-    {
-        $request->validate([
-            'topic' => 'required|string|max:255',
-            'new_consultation_id' => 'required|exists:consultations,id',
-        ]);
+{
+    $request->validate([
+        'topic' => 'required|string|max:255',
+        'new_consultation_id' => 'required|exists:consultations,id',
+    ]);
 
-        // Pārbauda, lai jauna konsultācija būdu pieejama
-        $newConsultation = Consultation::find($request->new_consultation_id);
+    // Pārbauda, lai jauna konsultācija būtu pieejama
+    $newConsultation = Consultation::find($request->new_consultation_id);
 
-        if (!$newConsultation || $newConsultation->is_active == 0) {
-            return back()->with('error', 'Izvēlētā konsultācija nav pieejama.');
-        }
-
-        // Tekoša ieraksta dzēšana 
-        $consultation->users()->detach(auth()->id());
-
-        // User pievienošana pie jaunam konsultācijam
-        $newConsultation->users()->attach(auth()->id(), ['topic' => $request->topic]);
-
-        return redirect()->route('myConsultation.index')->with('success', 'Konsultācija veiksmīgi atjaunināta.');
+    if (!$newConsultation || $newConsultation->is_active == 0) {
+        return back()->with('error', 'Izvēlētā konsultācija nav pieejama.');
     }
+
+    // Pārbauda, vai jauna konsultācija jau ir pilna
+    if ($newConsultation->users()->count() >= 10) {
+        return back()->with('error', 'Šī konsultācija jau ir pilna (maks. 10 studenti).');
+    }
+
+    // Tekoša ieraksta dzēšana 
+    $consultation->users()->detach(auth()->id());
+
+    // User pievienošana pie jaunām konsultācijām
+    $newConsultation->users()->attach(auth()->id(), ['topic' => $request->topic]);
+
+    return redirect()->route('myConsultation.index')->with('success', 'Konsultācija veiksmīgi atjaunināta.');
+}
 
 }
