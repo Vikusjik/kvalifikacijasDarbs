@@ -266,15 +266,27 @@
                                         <input type="text" id="topic-{{ $consultation->id }}" name="topic" value="{{ $consultation->pivot->topic ?? '' }}" required>
 
                                         <!-- Dropdown ar konsultācijām -->
-                                        <label for="new_consultation-{{ $consultation->id }}">Izvēlieties citu laiku:</label>
-                                        <select id="new_consultation-{{ $consultation->id }}" name="new_consultation_id" required>
-                                            <option value="">Izvēlieties konsultāciju</option>
-                                            @foreach($availableConsultations as $available)
-                                                <option value="{{ $available->id }}" {{ $available->id == $consultation->id ? 'selected' : '' }}>
-                                                    {{ $available->date_time->format('d.m.Y H:i') }}
-                                                </option>
-                                            @endforeach
-                                        </select>
+                                            <label for="new_consultation-{{ $consultation->id }}">Izvēlieties citu laiku:</label>
+                                            <select id="new_consultation-{{ $consultation->id }}" name="new_consultation_id" required>
+                                                <option value="">Izvēlieties konsultāciju</option>
+
+                                                <!-- Parāda esošo konsultāciju, ja tā nav pieejamo sarakstā -->
+                                                @if(
+                                                    !isset($availableConsultations[$consultation->creator->id]) ||
+                                                    !$availableConsultations[$consultation->creator->id]->contains('id', $consultation->id)
+                                                )
+                                                    <option value="{{ $consultation->id }}" selected>
+                                                        {{ $consultation->date_time->format('d.m.Y H:i') }} (jūsu izvēlēta)
+                                                    </option>
+                                                @endif
+
+                                                <!-- Parāda visas pieejamās konsultācijas no šī pasniedzēja -->
+                                                @foreach($availableConsultations[$consultation->creator->id] ?? [] as $available)
+                                                    <option value="{{ $available->id }}" {{ $available->id == $consultation->id ? 'selected' : '' }}>
+                                                        {{ $available->date_time->format('d.m.Y H:i') }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
 
                                         <button type="submit">Saglabāt</button>
                                     </form>
