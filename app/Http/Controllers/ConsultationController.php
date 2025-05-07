@@ -137,10 +137,7 @@ class ConsultationController extends Controller
 
         $consultation->delete();
         
-        // Sūta paziņojumus visiem studentiem, kuri bija pierakstījušies
-        foreach ($consultation->users as $student) {
-            $student->notify(new ConsultationUpdatedNotification($consultation, 'deleted'));
-        }
+       
 
         return redirect('/consultations')->with('success', 'Konsultācija veiksmīgi dzēsta!');
     }

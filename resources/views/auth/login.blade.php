@@ -90,9 +90,15 @@
     <x-guest-layout>
         <div class="auth-card">
             <!-- Logotips -->
-            <div class="logo-container">
+                    <div class="logo-container">
+            <!-- Logotips kā saite uz sākuma lapu -->
+            <a href="{{ url('/') }}">
                 <img src="{{ asset('images/VT-logo.jpeg') }}" alt="VT Logo" class="logo">
-            </div>
+            </a>
+        </div>
+
+
+
 
             <!-- Validācijas kļūdas -->
             <x-validation-errors class="mb-4" />
