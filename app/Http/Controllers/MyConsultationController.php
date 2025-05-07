@@ -11,16 +11,27 @@ class MyConsultationController extends Controller
     public function index()
     {
         $myConsultations = auth()->user()->consultations()
-            ->with(['creator']) // Skolotāja dati
+            ->with(['creator'])
             ->withPivot('topic')
             ->get();
     
-        // Iegūst visas pieejamās konsultācijas
-        $availableConsultations = Consultation::where('is_active', 1)->get()->groupBy('creator_id');
+        // Saņēmam konsultācijas, sagrupētas pēc skolotāja
+        $availableConsultationsByTeacher = [];
+    
+        foreach ($myConsultations as $consultation) {
+            $teacherId = $consultation->creator->id ?? null;
+    
+            if ($teacherId) {
+                $availableConsultationsByTeacher[$consultation->id] = Consultation::where('is_active', 1)
+                    ->where('created_by', $teacherId)
+                    ->where('id', '!=', $consultation->id) 
+                    ->get();
+            }
+        }
     
         return view('myConsultations.index', [
             'myConsultations' => $myConsultations,
-            'availableConsultations' => $availableConsultations, // Grupēts pēc skolotāja
+            'availableConsultationsByTeacher' => $availableConsultationsByTeacher,
         ]);
     }
     
