@@ -36,31 +36,31 @@ class MyConsultationController extends Controller
     }
     
 
-public function cancel(Request $request, $consultationId)
-{
-    $consultation = Consultation::findOrFail($consultationId);
+    public function cancel(Request $request, $consultationId)
+    {
+        $consultation = Consultation::findOrFail($consultationId);
 
-    // Saglābājam atteikšanas iemeslu (pirms dzēšanas!)
-    $consultation->users()->updateExistingPivot(auth()->id(), [
-        'reason' => $request->input('reason')
-    ]);
+        // Saglābājam atteikšanas iemeslu (pirms dzēšanas!)
+        $consultation->users()->updateExistingPivot(auth()->id(), [
+            'reason' => $request->input('reason')
+        ]);
 
-    //Noņemam studentu no konsultacijas
-    $consultation->users()->detach(auth()->id());
+        //Noņemam studentu no konsultacijas
+        $consultation->users()->detach(auth()->id());
 
-    // Saņemam skolotāju
-    $teacher = $consultation->creator;
+        // Saņemam skolotāju
+        $teacher = $consultation->creator;
 
-    // Sūtam paziņojumu
-    $teacher->notify(new ConsultationCancelled(
-        $consultation,
-        $request->input('reason'),
-        auth()->user()
-    ));
+        // Sūtam paziņojumu
+        $teacher->notify(new ConsultationCancelled(
+            $consultation,
+            $request->input('reason'),
+            auth()->user()
+        ));
 
-    return redirect()->route('myConsultation.index')
-        ->with('success', 'Konsultācija ir atcēlta. Iemesls: ' . $request->input('reason'));
-}
+        return redirect()->route('myConsultation.index')
+            ->with('success', 'Konsultācija ir atcēlta. Iemesls: ' . $request->input('reason'));
+    }
 
 
     public function update(Request $request, Consultation $consultation)

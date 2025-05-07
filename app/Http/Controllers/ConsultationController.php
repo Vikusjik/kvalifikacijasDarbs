@@ -136,8 +136,6 @@ class ConsultationController extends Controller
         }
 
         $consultation->delete();
-        
-       
 
         return redirect('/consultations')->with('success', 'Konsultācija veiksmīgi dzēsta!');
     }
