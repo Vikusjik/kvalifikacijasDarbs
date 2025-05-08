@@ -22,9 +22,11 @@ class MyConsultationController extends Controller
             $teacherId = $consultation->creator->id ?? null;
     
             if ($teacherId) {
+                $userConsultationIds = $myConsultations->pluck('id')->toArray();
+
                 $availableConsultationsByTeacher[$consultation->id] = Consultation::where('is_active', 1)
                     ->where('created_by', $teacherId)
-                    ->where('id', '!=', $consultation->id) 
+                    ->whereNotIn('id', $userConsultationIds) // Noņēmam visas, uz kuru jau pieteikts ir
                     ->get();
             }
         }
