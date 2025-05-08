@@ -105,7 +105,8 @@
         <form action="{{ route('consultations.store') }}" method="POST">
             @csrf
             <label for="date_time">Konsultācijas datums un laiks:</label>
-            <input type="datetime-local" id="date_time" name="date_time" required>
+            <input type="datetime-local" id="date_time" name="date_time" required min="{{ \Carbon\Carbon::now()->format('Y-m-d\TH:i') }}">
+
 
             <div class="button-container">
                 <button type="submit" class="submit-btn">Saglabāt</button>
